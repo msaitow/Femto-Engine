@@ -1,0 +1,260 @@
+
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <boost/format.hpp>
+#include <femto.hpp>
+#include <SQterm.hpp>
+#include <SQindex.hpp>
+#include <SQtensor.hpp>
+#include <SQreaktor.hpp>
+#include <Orz.hpp>
+
+using namespace std;
+
+int main(){
+
+  std::vector<femto::SQindex*> EL_indices;
+  std::vector<femto::SQindex*> ER_indices;
+  std::vector<femto::SQindex*> ET_indices;
+
+  femto::SQindex A("a", femto::virt);
+  femto::SQindex B("b", femto::virt, true);
+  femto::SQindex C("c", femto::virt);
+  femto::SQindex D("d", femto::virt, true);
+
+  femto::SQindex I("i", femto::act);
+  femto::SQindex J("j", femto::act, true);
+  femto::SQindex K("k", femto::act);
+  femto::SQindex L("l", femto::act, true);
+
+  vector<femto::SQindex> Ps;
+  vector<femto::SQindex> Qs;
+  vector<femto::SQindex> Rs;
+  vector<femto::SQindex> Ss;
+  for(size_t space = 0;space < 3;++space){
+    Ps.push_back(femto::SQindex("p", (femto::char_state)space, true));
+    Qs.push_back(femto::SQindex("q", (femto::char_state)space, true));
+    Rs.push_back(femto::SQindex("r", (femto::char_state)space, true));
+    Ss.push_back(femto::SQindex("s", (femto::char_state)space, true));
+  }
+
+  EL_indices.push_back(&I);
+  EL_indices.push_back(&K);  
+  EL_indices.push_back(&A);
+  EL_indices.push_back(&C);  
+
+  ER_indices.push_back(&B);
+  ER_indices.push_back(&D);
+  ER_indices.push_back(&J);
+  ER_indices.push_back(&L);
+
+  ET_indices.push_back(&J);
+  ET_indices.push_back(&L);
+  ET_indices.push_back(&B);
+  ET_indices.push_back(&D);
+
+  femto::sfGen EL(EL_indices);
+  femto::sfGen ER(ER_indices);
+
+  // T2 amplitude
+  femto::SQtensor Tamp("T2", ET_indices, femto::t2_symm());
+
+  // Unit coefficient
+  vector<string> coeff1;
+
+  vector<femto::SQterm> result; result.reserve(femto::Nterms());
+  //  vector<femto::SQterm> CoreTerms; CoreTerms.reserve(femto::Nterms());
+
+  // One-body part ....
+  for(vector<femto::SQindex>::iterator p = Ps.begin();p != Ps.end();++p){
+    for(vector<femto::SQindex>::iterator q = Qs.begin();q != Qs.end();++q){
+
+      std::vector<femto::SQindex*> EH_indices;
+      EH_indices.push_back(&(*p));
+      EH_indices.push_back(&(*q));
+
+      femto::SQtensor h("h", EH_indices, femto::h1_symm());
+      femto::sfGen EH(EH_indices);
+
+      // < Psi | EL h EH T2 ER | Psi >
+      vector<femto::SQtensor> ten1;
+      ten1.push_back(EL);
+      ten1.push_back(h);
+      ten1.push_back(EH);
+      ten1.push_back(Tamp);
+      ten1.push_back(ER);
+
+      femto::SQterm term1(1.0, coeff1, ten1);
+      vector<femto::SQterm> batch; batch.push_back(term1);
+      femto::normalOrder(&batch); 
+
+      for(vector<femto::SQterm>::iterator b_it = batch.begin();b_it != batch.end();++b_it){ 
+        b_it->contractkDeltas(); // Burst Kronecker's deltas 
+        //b_it->decomposeRDM(&CoreTerms);    // Decompose RDM, or sfGen 
+        b_it->decomposeRDMVirt();    // Decompose RDM, or sfGen 
+      } 
+      vector<femto::SQterm> temp;
+      femto::screenTerms(batch, &temp); // Screen terms with negligible factor
+
+      for(vector<femto::SQterm>::iterator b_it = temp.begin();b_it != temp.end();++b_it) 
+        b_it->transform2RDM(); // Transform sfGen to RDM (only if isInCanonical is true)
+
+      result.insert(result.end(), temp.begin(), temp.end()); //*SLOW* 
+
+    } // End q
+  } // End p
+
+  // Two-body part ....
+  int c = 0;
+  for(vector<femto::SQindex>::iterator p = Ps.begin();p != Ps.end();++p){
+    for(vector<femto::SQindex>::iterator q = Qs.begin();q != Qs.end();++q){
+      for(vector<femto::SQindex>::iterator r = Rs.begin();r != Rs.end();++r){
+        for(vector<femto::SQindex>::iterator s = Ss.begin();s != Ss.end();++s){
+
+          std::vector<femto::SQindex*> EH_indices;
+          EH_indices.push_back(&(*p));
+          EH_indices.push_back(&(*q));
+          EH_indices.push_back(&(*r));
+          EH_indices.push_back(&(*s));
+
+          femto::SQtensor V("V2", EH_indices, femto::h2_symm());
+          femto::sfGen EH(EH_indices);
+
+          // < Psi | EL V EH T2 ER | Psi >
+          vector<femto::SQtensor> ten1;
+          ten1.push_back(EL);
+          ten1.push_back(V);
+          ten1.push_back(EH);
+          ten1.push_back(Tamp);
+          ten1.push_back(ER);
+                
+          femto::SQterm term1(0.5, coeff1, ten1);
+
+          vector<femto::SQterm> batch; batch.push_back(term1);
+          femto::normalOrder(&batch); 
+
+          for(vector<femto::SQterm>::iterator b_it = batch.begin();b_it != batch.end();++b_it){ 
+            b_it->contractkDeltas(); // Burst Kronecker's deltas 
+            b_it->decomposeRDMVirt();    // Decompose RDM, or sfGen 
+            //b_it->decomposeRDM(&CoreTerms);    // Decompose RDM, or sfGen 
+          }
+
+          vector<femto::SQterm> temp;
+          femto::screenTerms(batch, &temp); // Screen terms with negligible factor
+
+     	  for(vector<femto::SQterm>::iterator b_it = temp.begin();b_it != temp.end();++b_it) 
+	    { cout << *b_it << endl; b_it->transform2RDM(); }// Transform sfGen to RDM (only if isInCanonical is true)
+          result.insert(result.end(), temp.begin(), temp.end());
+
+        } // End s
+      } // End r
+    } // End q
+  } // End p
+
+//  // Overlap for test
+//  {
+//    vector<femto::SQtensor> ten;
+//    ten.push_back(EL);
+//    ten.push_back(Tamp);
+//    ten.push_back(ER);
+//  
+//    vector<string> Ecas;
+//  
+//    femto::SQterm term(1.0, Ecas, ten);
+//    vector<femto::SQterm> batch; batch.push_back(term);
+//    femto::normalOrder(&batch);
+//  
+//    for(vector<femto::SQterm>::iterator b_it = batch.begin();b_it != batch.end();++b_it){ 
+//      b_it->contractkDeltas(); // Burst Kronecker's deltas 
+//      b_it->decomposeRDM(&CoreTerms);    // Decompose RDM, or sfGen 
+//    }
+//  
+//    vector<femto::SQterm> temp;
+//    femto::screenTerms(batch, &temp); // Screen terms with negligible factor
+//  
+//    for(vector<femto::SQterm>::iterator b_it = temp.begin();b_it != temp.end();++b_it) 
+//      { cout << *b_it << endl; b_it->transform2RDM(); }// Transform sfGen to RDM (only if isInCanonical is true)
+//    result.insert(result.end(), temp.begin(), temp.end());
+//  }
+
+  vector<femto::SQterm> combined_result;
+  combined_result = result;
+  //femto::combineTerms(result, &combined_result);
+
+  cout << endl << "Decompose RDMs ..... " << endl;
+  int cnt = 0;
+  vector<femto::SQterm> result2;
+  for(vector<femto::SQterm>::iterator t = combined_result.begin();t != combined_result.end();++t){
+    vector<femto::SQterm> batch;
+    //cout << boost::format("%5d : ") % cnt++ << *t << endl;
+    femto::decomposeRDMCore(*t, &batch);
+    vector<femto::SQterm>::iterator new_t = batch.begin();
+    for(;new_t != batch.end();++new_t){
+      new_t->contractkDeltas();
+      new_t->transform2RDM();
+    } // End new_t
+    result2.insert(result2.end(), batch.begin(), batch.end());
+  } // End t
+
+  vector<femto::SQterm> combined_result2;
+  femto::combineTerms(result2, &combined_result2);
+
+  cout << endl;
+  cnt = 0;
+
+  int count = 0;
+  cout << endl;
+  cout << "< RESULT >" << endl;
+  for(vector<femto::SQterm>::iterator t = combined_result2.begin();t != combined_result2.end();++t){
+    //cout << count << " : " << *t << endl;
+    cout << boost::format("%5d : ") % count << *t << endl;
+    ++count;
+  }
+  
+  // TeX conversion
+  ofstream formulas("formulas.tex");
+  femto::SQtensor Sig("S2", EL_indices, femto::u4_symm());
+  formulas << Sig << "&= ";  
+  for(vector<femto::SQterm>::iterator t = combined_result2.begin();t != combined_result2.end();++t, ++cnt){
+    formulas << t->convert2LaTeX();
+    if((cnt+1)%5==0) formulas << endl << "&";
+  } // End t
+  formulas << endl;
+
+  int count2 = 0;
+  cout << endl;
+  cout << "< RESULT >" << endl;
+  for(vector<femto::SQterm>::iterator t = combined_result2.begin();t != combined_result2.end();++t){
+    cout << boost::format("%5d : ") % count2 << *t << endl;
+    ++count2;
+  }
+  cout << endl;
+
+  // ****** Conversion of tensor into the code starts ********
+  count2 = 0;
+  cout << endl;
+  cout << "< RESULT2 >" << endl;
+  // Convert Dirac 2 Mulliken, do not do twice!
+  for(vector<femto::SQterm>::iterator t = combined_result2.begin();t != combined_result2.end();++t){
+    for(size_t i = 0;i < t->get_tensors().size();++i){
+      if(t->get_tensors()[i].get_name() == "V2") t->get_tensors_ptr()[i]->convertD2M();
+      if(femto::is_RDM(t->get_tensors()[i].get_name())) t->get_tensors_ptr()[i]->convertD2M();
+    } // End i
+    cout << boost::format("%5d : ") % count2 << *t << endl;
+    ++count2;
+  }
+
+  // ********* Construct Sigma *************
+  string thisname("sigma_oovv_oovv");
+  femto::SQreaktor gen(Sig, combined_result2, thisname, true, "V2", "T2");
+  gen.set_use_cumulant(true);
+  //gen.set_V_D(false);
+  //gen.replace_Fock();
+  //cout << "NUM : " << gen.num_inTerms() << endl;;
+  gen.generate(femto::Orz, femto::Factorize);
+  cout << "NUM : " << gen.num_inTerms() << endl;;
+  // ********* Construct Sigma *************
+
+}
+

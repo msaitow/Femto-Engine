@@ -1,0 +1,11 @@
+
+* Description about the tensor files
+
+In the ic-mrci sigma equation, the two-fold permutational symmetry of the sigma-vector of the internally-contracted basis,
+
+\sigma^L <= \sum_R <E^L H T_R E_R>
+
+where L and R refer to the spin-free unitary group generator, is enabled only for the three cases, L=ccaa/R=ccaa, L=aavv/R=aavv and L=ccvv/R=ccvv. This limitation is due to the 
+current treatment of the bare-amplitude in the Orz package and therefore, can be removed in future.
+
+Masaaki Saitow

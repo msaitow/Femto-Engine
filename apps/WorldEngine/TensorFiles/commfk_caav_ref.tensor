@@ -1,0 +1,10 @@
+--|Title[The zeroth-order ct residual_{caav}^{ref} equation in Mulliken notation]
+
+--|Begin.AllContras(1)
+	--|Begin.Contras(1)
+		@S2(w,i,j,a) <<= -2.0 @D1(j,i) @cF(w,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

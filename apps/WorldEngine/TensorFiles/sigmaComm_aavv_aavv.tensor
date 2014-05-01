@@ -1,0 +1,70 @@
+--|Title[Decomposition of sigma_{aavv}^{aavv} in Mulliken notation with commutator transformation]
+
+--|Begin.AllContras(13)
+	--|Begin.Contras(2)
+		@W0(j,i,v0,a) <<= +1.0 @T2(a1,a0,v0,a) @D2(j,a1,i,a0)
+		@S2(j,i,b,a) <<= +2.0 @Fcore(v0,b) @W0(j,i,v0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(j,i,b,v0) <<= +1.0 @T2(a0,a1,v0,b) @D2(j,a1,i,a0)
+		@S2(i,j,a,b) <<= +2.0 @Fcore(v0,a) @W1(j,i,b,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(j,i,a0,a1) <<= +1.0 @D2(j,a2,i,a0) @Fcore(a2,a1)
+		@S2(i,j,a,b) <<= -2.0 @T2(a0,a1,a,b) @W2(j,i,a0,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(j,i,a0,a1) <<= +1.0 @D2(j,a0,i,a2) @Fcore(a2,a1)
+		@S2(i,j,a,b) <<= -2.0 @T2(a1,a0,a,b) @W3(j,i,a0,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(j,i,a1,a0,v0,a) <<= +1.0 @V2(v0,a2,a3,a) @D3(j,a1,i,a3,a2,a0)
+		@S2(i,j,a,b) <<= +2.0 @T2(a1,a0,b,v0) @W4(j,i,a1,a0,v0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(j,i,a1,a0,v0,b) <<= +1.0 @V2(v0,a3,b,a2) @D3(j,a2,i,a1,a3,a0)
+		@S2(i,j,a,b) <<= +2.0 @T2(a1,a0,a,v0) @W5(j,i,a1,a0,v0,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(j,i,a1,a0,v0,b) <<= +1.0 @V2(v0,b,a3,a2) @D3(j,a1,i,a0,a3,a2)
+		@S2(i,j,a,b) <<= +2.0 @T2(a0,a1,a,v0) @W6(j,i,a1,a0,v0,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(j,i,a1,a0,v0,a) <<= +1.0 @V2(v0,a,a3,a2) @D3(j,a1,i,a0,a3,a2)
+		@S2(i,j,a,b) <<= +2.0 @T2(a1,a0,b,v0) @W7(j,i,a1,a0,v0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W8(a1,a0,b,a) <<= +1.0 @V2(b,v1,v0,a) @T2(a1,a0,v1,v0)
+		@S2(i,j,a,b) <<= +2.0 @D2(j,a1,i,a0) @W8(a1,a0,b,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W9(j,i,a0,a1) <<= +1.0 @V2(a1,a3,a4,a2) @D3(j,a3,i,a0,a4,a2)
+		@S2(i,j,a,b) <<= -2.0 @T2(a0,a1,a,b) @W9(j,i,a0,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W10(j,i,a0,a1) <<= +1.0 @V2(a1,a3,a4,a2) @D3(j,a0,i,a3,a4,a2)
+		@S2(i,j,a,b) <<= -2.0 @T2(a1,a0,a,b) @W10(j,i,a0,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W11(j,i,a1,a0) <<= +1.0 @V2(a1,a3,a2,a0) @D2(j,a3,i,a2)
+		@S2(i,j,a,b) <<= -2.0 @T2(a0,a1,a,b) @W11(j,i,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(i,j,a,b) <<= +2.0 E0 @T2(a0,a1,a,b) @D2(j,a1,i,a0)
+	--|End.Contras
+
+
+--|End.AllContras
+

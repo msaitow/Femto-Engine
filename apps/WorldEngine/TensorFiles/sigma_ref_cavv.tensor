@@ -1,0 +1,16 @@
+--|Title[The full-ic mrci sigma_{ref}^{cavv} equation in Mulliken notation]
+
+--|Begin.AllContras(2)
+	--|Begin.Contras(2)
+		@W0(c0,a0,v1,v0) <<= +1.0 @V2(v1,c0,v0,a1) @D1(a1,a0)
+		@S0() <<= +2.0 @T2(c0,a0,v1,v0) @W0(c0,a0,v1,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(c0,a0,v1,v0) <<= +1.0 @V2(v1,c0,v0,a1) @D1(a1,a0)
+		@S0() <<= -1.0 @T2(c0,a0,v0,v1) @W1(c0,a0,v1,v0)
+	--|End.Contras
+
+
+--|End.AllContras
+

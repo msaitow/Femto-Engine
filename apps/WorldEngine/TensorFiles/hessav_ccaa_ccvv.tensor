@@ -1,0 +1,39 @@
+--|Title[The ct residual_{ccaa}^{ccvv} equation in Mulliken notation]
+
+--|Begin.AllContras(7)
+	--|Begin.Contras(2)
+		@W0(j,i,v1,v0) <<= +1.0 @V2(v1,i,v0,a0) @D1(j,a0)
+		@S2(w,x,i,j) <<= -8.0 @T2(x,w,v0,v1) @W0(j,i,v1,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(j,i,v1,v0) <<= +1.0 @V2(v1,i,v0,a0) @D1(j,a0)
+		@S2(w,x,i,j) <<= +4.0 @T2(w,x,v0,v1) @W1(j,i,v1,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(i,j,v1,v0) <<= +1.0 @V2(v1,j,v0,a0) @D1(i,a0)
+		@S2(w,x,i,j) <<= -8.0 @T2(w,x,v0,v1) @W2(i,j,v1,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(i,j,v1,v0) <<= +1.0 @V2(v1,j,v0,a0) @D1(i,a0)
+		@S2(w,x,i,j) <<= +4.0 @T2(x,w,v0,v1) @W3(i,j,v1,v0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,i,j) <<= +16.0 @V2(v1,j,v0,i) @T2(w,x,v0,v1)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,i,j) <<= -8.0 @V2(v1,i,v0,j) @T2(w,x,v0,v1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(j,i,v1,v0) <<= +1.0 @V2(v1,a1,v0,a0) @D2(j,a1,i,a0)
+		@S2(w,x,i,j) <<= +2.0 @T2(w,x,v0,v1) @W4(j,i,v1,v0)
+	--|End.Contras
+
+
+--|End.AllContras
+

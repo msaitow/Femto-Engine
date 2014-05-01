@@ -1,0 +1,46 @@
+--|Title[The ct residual_{caaa}^{ref} equation in Mulliken notation]
+
+--|Begin.AllContras(10)
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= +4.0 @D1(k,j) @Fcore(w,i)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= -2.0 @D1(k,i) @Fcore(w,j)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= -2.0 @D2(k,j,a0,i) @Fcore(w,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(k,w,j,i) <<= +4.0 @V2(i,w,a1,a0) @D2(k,j,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(k,w,j,i) <<= -2.0 @V2(i,a0,w,a1) @D2(k,j,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= -2.0 @V2(j,w,a1,a0) @D2(k,i,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= -2.0 @V2(j,a0,w,a1) @D2(k,a0,a1,i)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= +4.0 @V2(j,a0,w,i) @D1(k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= -2.0 @V2(j,w,i,a0) @D1(k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= -2.0 @V2(w,a2,a1,a0) @D3(k,j,a2,i,a1,a0)
+	--|End.Contras
+
+
+--|End.AllContras
+

@@ -1,0 +1,64 @@
+
+#include <iostream>
+#include <vector>
+#include <boost/format.hpp>
+#include "femto.hpp"
+#include "SQterm.hpp"
+#include "SQindex.hpp"
+#include "SQtensor.hpp"
+
+using namespace std;
+
+int main(){
+
+  std::vector<femto::SQindex*> E1_indices;
+  std::vector<femto::SQindex*> E2_indices;
+  std::vector<femto::SQindex*> E3_indices;
+  femto::SQindex P = femto::SQindex("p", femto::act);
+  femto::SQindex Q = femto::SQindex("q", femto::act);
+  femto::SQindex R = femto::SQindex("r", femto::act);
+  femto::SQindex S = femto::SQindex("s", femto::act);
+
+  femto::SQindex A = femto::SQindex("a", femto::core);
+  femto::SQindex B = femto::SQindex("b", femto::core);
+  femto::SQindex C = femto::SQindex("c", femto::core);
+  femto::SQindex D = femto::SQindex("d", femto::act);
+
+  femto::SQindex K = femto::SQindex("k", femto::act);
+  femto::SQindex L = femto::SQindex("l", femto::act);
+  femto::SQindex M = femto::SQindex("m", femto::act);
+  femto::SQindex N = femto::SQindex("n", femto::act);
+
+  E1_indices.push_back(&P);
+  E1_indices.push_back(&Q);
+  E1_indices.push_back(&R);
+  E1_indices.push_back(&S);
+
+  E2_indices.push_back(&A);
+  E2_indices.push_back(&B);
+  E2_indices.push_back(&C);
+  E2_indices.push_back(&D);
+
+  E3_indices.push_back(&K);
+  E3_indices.push_back(&L);
+  E3_indices.push_back(&M);
+  E3_indices.push_back(&N);
+
+  vector<femto::SQtensor> ten;
+  ten.push_back(femto::sfGen(E1_indices));
+  ten.push_back(femto::sfGen(E3_indices));
+  ten.push_back(femto::sfGen(E2_indices));
+
+  vector<string> coeff;
+  string p("");
+  coeff.push_back(p);
+  femto::SQterm t(1.0, coeff, ten);
+
+  cout << endl;
+  cout << "inTerm .... " << endl;
+  cout << t << endl;
+  vector<femto::SQterm> result; result.push_back(t);
+  femto::normalOrder(&result);
+  vector<femto::SQterm>::iterator it = result.begin();
+  for(int count = 0;it != result.end();++it,++count) cout << count << " : " << *it << endl;
+}

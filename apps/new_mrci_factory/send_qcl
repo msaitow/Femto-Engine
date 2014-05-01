@@ -1,0 +1,9 @@
+
+rm ./sources/*
+rm ./sources.tar.gz
+mv ./c_* ./sources 
+mv ./f_* ./sources
+tar -zcvf ./sources.tar.gz ./sources
+scp ./sources.tar.gz saitow@qcl.ims.ac.jp:
+#ssh saitow@qcl.ims.ac.jp
+#scp ./sources.tar.gz qclo:

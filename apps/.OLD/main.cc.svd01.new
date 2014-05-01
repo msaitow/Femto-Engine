@@ -1,0 +1,377 @@
+
+#include <iostream>
+#include <vector>
+#include <boost/format.hpp>
+#include "femto.hpp"
+#include "SQterm.hpp"
+#include "SQindex.hpp"
+#include "SQtensor.hpp"
+
+using namespace std;
+
+int main(){
+//  femto::Cnum A(3,2);
+//  femto::Cnum B(2);
+//  femto::Cnum C(4,3);
+//    
+//  string Astr = C.to_string();
+//  cout << "A " << Astr << endl;
+//  
+//  A.print();
+//  
+//  cout << endl;
+//  
+//  B.print();
+//  cout << endl;
+//    
+//  femto::Cnum D = A * A * B;
+//  D.print();
+//  cout << endl;
+//  
+//  A += B;
+//  A.print();
+//  cout << endl;
+//  B.print();
+//  cout << endl;    
+//
+//  A *= C;
+//  A.print();
+//  cout << endl;
+//
+//  typedef boost::shared_ptr<femto::Cnum> shared_num;
+//  shared_num X(new femto::Cnum(2,3));
+//  std::vector<shared_num> num_vec;
+
+  femto::SQindex a("a", femto::core);
+  cout << endl;
+  cout << "a Index : " << a.get_index() << endl;
+  cout << "a Tag   : " << a.get_char() << endl;
+  cout << "a Sum?  : " << a.get_isSummed() << endl;
+  
+  femto::SQindex b("b", femto::act, true);
+  cout << endl;
+  cout << "b Index : " << b.get_index() << endl;
+  cout << "b Tag   : " << b.get_char() << endl;
+  cout << "a Sum?  : " << b.get_isSummed() << endl;
+
+  a=b;
+  cout << endl;
+  cout << "After copying .... " << endl;
+  cout << "Name changed to bbb" << endl; 
+  a.put_index("bbb");
+  cout << "a Index : " << a.get_index() << endl;
+  cout << "a Tag   : " << a.get_char() << endl;
+  cout << "a Sum?  : " << a.get_isSummed() << endl;
+
+  femto::SQindex c(a);
+  cout << endl;
+  cout << "CC .... " << endl;
+  cout << "c Index : " << c.get_index() << endl;
+  cout << "c Tag   : " << c.get_char() << endl;
+  cout << "c Sum?  : " << c.get_isSummed() << endl;
+  
+  femto::SQindex X = femto::SQindex("X", femto::core);
+  cout << endl;
+  cout << X.get_index() << endl;
+
+  cout << (femto::core==femto::act)  << endl;
+  cout << (femto::core==femto::virt) << endl;
+  cout << (femto::core==femto::core) << endl;
+  cout << X << endl;
+
+  std::vector<femto::SQindex*> K_indices;
+  femto::SQindex I = femto::SQindex("i", femto::act);
+  femto::SQindex J = femto::SQindex("j", femto::act);
+  femto::SQindex A = femto::SQindex("a", femto::virt);
+  femto::SQindex B = femto::SQindex("b", femto::virt);
+  K_indices.push_back(&I);
+  K_indices.push_back(&J);
+  K_indices.push_back(&A);
+  K_indices.push_back(&B);
+  
+  femto::Symmetry symm;
+  vector<int> s1;
+  for(int i = 0;i < 4;++i) s1.push_back(i);
+  //s1.push_back(3);
+  //s1.push_back(3);
+  //s1.push_back(3);
+  //s1.push_back(3);
+
+  symm.first.push_back(s1);
+  symm.second.push_back(1);
+
+  femto::SQtensor K("K", K_indices, symm);
+  cout << K << endl;
+
+  std::vector<femto::SQindex*> V_indices;
+  femto::SQindex C = femto::SQindex("c", femto::virt);
+  femto::SQindex D = femto::SQindex("d", femto::virt);
+  V_indices.push_back(&I);
+  V_indices.push_back(&J);
+  V_indices.push_back(&C);
+  V_indices.push_back(&D);
+  
+//   femto::Symmetry symm;
+//   vector<int> s1;
+//   for(int i = 0;i < 4;++i) s1.push_back(i);
+//   symm.first.push_back(s1);
+//   symm.second.push_back(1);;
+  femto::SQtensor V("V", V_indices, symm);
+  cout << V << endl;
+
+  vector<femto::SQindex*> vec(K.get_indices());
+  vec[0]->put_index("M");
+  cout << endl;
+  cout << K << endl;
+  cout << V << endl;
+
+  cout << endl;
+  cout << "After sorting K .... " << endl;
+  K.sortIndices();
+  cout << K << endl;
+
+  cout << endl;
+  cout << "After sorting V2 .... " << endl;
+  femto::Ivector S0; // {0,1,2,3}
+  S0.push_back(0);
+  S0.push_back(1); 
+  S0.push_back(2); 
+  S0.push_back(3); 
+
+  femto::Ivector S1; //{2,1,0,3};
+  S1.push_back(2);
+  S1.push_back(1); 
+  S1.push_back(0); 
+  S1.push_back(3); 
+
+  femto::Ivector S2; //{0,3,2,1};
+  S2.push_back(0);
+  S2.push_back(3); 
+  S2.push_back(2); 
+  S2.push_back(1); 
+
+  femto::Ivector S3; //{1,0,3,2};
+  S3.push_back(1);
+  S3.push_back(0); 
+  S3.push_back(3); 
+  S3.push_back(2); 
+
+  femto::Ivector fac; //{1, 1, 1, 1};
+  fac.push_back(1);
+  fac.push_back(1);
+  fac.push_back(1);
+  fac.push_back(1);
+
+  femto::Symmetry V2_sym;
+  V2_sym.first.push_back(S0);
+  V2_sym.first.push_back(S1);
+  V2_sym.first.push_back(S2);
+  V2_sym.first.push_back(S3);
+
+  V2_sym.second.insert(V2_sym.second.end(), fac.begin(), fac.end());
+//   for(femto::Ivector::iterator it = V2_sym.second.begin();it < V2_sym.second.end();++it)
+//     cout << *it << endl;
+
+  femto::SQtensor V2("V2", V_indices, V2_sym);
+  V2.sortIndices();
+  cout << V2 << endl;
+
+  cout << endl;
+  cout << "After sorting V2' .... " << endl;
+
+  vector<femto::SQindex*> Vp_indices;
+  Vp_indices.push_back(&D);
+  Vp_indices.push_back(&C);
+  Vp_indices.push_back(&J);
+  Vp_indices.push_back(&I);
+
+  femto::SQtensor V2p("V2'", Vp_indices, V2_sym);
+  cout << "(Before sort ..... " << V2p << ")" << endl;
+  V2p.sortIndices();
+  cout << V2p << endl;
+  V2.print_symm();
+
+  cout << endl;
+  cout << "hasIndex ... " << I << endl;
+  cout << (V2p.hasIndex(&I) ? "Yes!" : "No!") << endl;
+  cout << endl;
+  cout << "hasIndex ... " << A << endl;
+  cout << (V2p.hasIndex(&A) ? "Yes!" : "No!") << endl;
+
+  cout << endl;
+  cout << "Kdelta test .... " << endl;
+  vector<femto::SQindex*> DI;
+  DI.push_back(&J);
+  DI.push_back(&I);
+  femto::kDelta KD(DI);
+  cout << KD << endl;
+  KD.sortIndices();
+  cout << KD << endl;
+
+  cout << endl;
+  cout << "RDM test .... " << endl;
+  vector<femto::SQindex*> Vd;
+  Vd.push_back(&I);
+  Vd.push_back(&J);
+  Vd.push_back(&J);
+  Vd.push_back(&J);
+  Vd.push_back(&I);
+  Vd.push_back(&I); 
+  femto::sfGen E2(Vd); 
+  cout << E2 << endl;
+  E2.sortIndices();
+  E2.print_symm();
+
+  I.put_index("i");
+  E2.sortIndices();
+  cout << endl << E2 << endl;
+
+  cout << endl;
+  vector<femto::SQindex*> Vd2;
+  Vd2.push_back(&I);
+  Vd2.push_back(&I);
+  Vd2.push_back(&I);
+  Vd2.push_back(&J);
+  Vd2.push_back(&J);
+  Vd2.push_back(&J);
+  femto::sfGen E2p(Vd2);
+  cout << E2p << endl;
+
+  cout << endl << (E2p==E2 ? "E2p==E2" : "E2p!=E2") << endl;
+  cout         << (E2==E2p ? "E2==E2p" : "E2!=E2p") << endl;
+  cout << endl;
+
+  E2p = E2;
+  cout << "After copied .... " << endl; 
+  cout << E2p << endl;
+  E2p.print_symm();
+
+//*RDM4*   cout << endl;
+//*RDM4*   vector<femto::SharedIndex> Vd3;
+//*RDM4*   Vd3.push_back(I);
+//*RDM4*   Vd3.push_back(J);
+//*RDM4*   Vd3.push_back(I);
+//*RDM4*   Vd3.push_back(J);
+//*RDM4*   Vd3.push_back(I);
+//*RDM4*   Vd3.push_back(J); 
+//*RDM4*   Vd3.push_back(I);
+//*RDM4*   Vd3.push_back(J); 
+//*RDM4*   femto::sfGen E4(Vd3);
+//*RDM4*   cout << E4 << endl;
+//*RDM4*   E4.print_symm();
+
+  cout << endl;
+  cout << "Perms test .... " << endl;
+  int n = 4;
+  femto::IIvector perms = femto::makePermutations(n);
+  for(int i = 0;i < perms.size();++i){
+    for(int j = 0;j < perms[i].size();++j) cout << perms[i][j] << " ";
+    cout << endl;
+  }
+
+  cout << endl;
+  cout << "Perms test2 .... " << endl;
+  femto::Ivector temp2;
+  for(int i = 0;i < 6;++i) temp2.push_back(i);
+  femto::IIvector perms2 = femto::makeTuples2(3, temp2);
+  int count = 0;
+  for(int i = 0;i < perms2.size();++i){
+    cout << boost::format("[%d] ") % count;
+    for(int j = 0;j < perms2[i].size();++j) cout << perms2[i][j] << " ";
+    cout << endl;
+    ++count;
+  }
+
+  {
+  cout << endl;
+  cout << "Perms test3 .... " << endl;
+  femto::Ivector temp2;
+  for(int i = 0;i < 6;++i) temp2.push_back(i);
+  femto::IIvector perms2 = femto::makeTuples1(3, temp2);
+  int count = 0;
+  for(int i = 0;i < perms2.size();++i){
+    cout << boost::format("[%d] ") % count;
+    for(int j = 0;j < perms2[i].size();++j) cout << perms2[i][j] << " ";
+    cout << endl;
+    ++count;
+  }
+  }
+
+  cout << endl;
+  cout << "SQterm test .... " << endl;
+  
+  vector<femto::SQtensor> tensors;
+  tensors.push_back(K);
+  tensors.push_back(V2);
+
+  vector<string> num;
+  num.push_back("");
+
+  femto::SQterm t1(1.0, num, tensors);
+
+  cout << t1 << endl;
+
+  cout << endl;
+  cout << "SharedIndex copy test .... " << endl;
+  
+//  cout << ("ff"=="gg") << endl;
+//  cout << ("ff"=="ff") << endl;
+
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << "*The act/act and diff case ..... *" << endl;
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << *I << ", " << *J << endl;
+//*Ind_Test   cout << (*I < *J ? *I : *J) << " is smaller .... " << endl;
+//*Ind_Test   cout << (*I > *J ? *I : *J) << " is bigger  .... " << endl;
+//*Ind_Test   if(*I==*J) cout << *I << " is equal to " << *J << endl;
+//*Ind_Test 
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << "*The act/act and same case ..... *" << endl;
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << *I << ", " << *I << endl;
+//*Ind_Test   cout << (*I < *I ? *I : *I) << " is smaller .... " << endl;
+//*Ind_Test   cout << (*I > *I ? *I : *I) << " is bigger  .... " << endl;
+//*Ind_Test   if(*I==*I) cout << " ..... but wait, " << *I << " is equal to " << *I << endl;
+//*Ind_Test 
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << "*The vir/vir and diff case ..... *" << endl;
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << *C << ", " << *D << endl;
+//*Ind_Test   cout << (*C < *D ? *C : *D) << " is smaller .... " << endl;
+//*Ind_Test   cout << (*C > *D ? *C : *D) << " is bigger  .... " << endl;
+//*Ind_Test   if(*C==*D) cout << *C << " is equal to " << *D << endl;
+//*Ind_Test 
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << "*The vir/vir and same case ..... *" << endl;
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << *C << ", " << *C << endl;
+//*Ind_Test   cout << (*C < *C ? *C : *C) << " is smaller .... " << endl;
+//*Ind_Test   cout << (*C > *C ? *C : *C) << " is bigger  .... " << endl;
+//*Ind_Test   if(*C==*C) cout << " ..... but wait, " << *C << " is equal to " << *C << endl;
+//*Ind_Test 
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << "*The act/vir and diff case ..... *" << endl;
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << *I << ", " << *D << endl;
+//*Ind_Test   cout << (*I < *D ? *I : *D) << " is smaller .... " << endl;
+//*Ind_Test   cout << (*I > *D ? *I : *D) << " is bigger  .... " << endl;
+//*Ind_Test   if(*I==*D) cout << *I << " is equal to " << *D << endl;
+//*Ind_Test 
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << "*The vir/act and diff case ..... *" << endl;
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << *C << ", " << *I << endl;
+//*Ind_Test   cout << (*C < *I ? *C : *I) << " is smaller .... " << endl;
+//*Ind_Test   cout << (*C > *I ? *C : *I) << " is bigger  .... " << endl;
+//*Ind_Test   if(*C==*I) cout << *C << " is equal to " << *I << endl;
+//*Ind_Test 
+//*Ind_Test   femto::SharedIndex Y(new femto::SQindex("b", femto::virt, true));
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << "*The Summed case ..... *" << endl;
+//*Ind_Test   cout << endl;
+//*Ind_Test   cout << *C << ", " << *Y << endl;
+//*Ind_Test   cout << (*C < *Y ? "c" : "b") << " is smaller .... " << endl;
+//*Ind_Test   cout << (*C > *Y ? "c" : "b") << " is bigger  .... " << endl;
+//*Ind_Test   if(*C==*Y) cout << " ..... but wait, " << *C << " is equal to " << *Y << endl;
+
+}

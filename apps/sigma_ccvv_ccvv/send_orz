@@ -1,0 +1,3 @@
+
+mv ./c_sigma_oovv_oovv.h ~/orz/src/sci/ctnew2
+mv ./f_sigma_oovv_oovv.F90 ~/orz/src/sci/ctnew2/fsrc/mrci_tensors

@@ -1,0 +1,14 @@
+--|Title[The ct residual_{ccvv}^{ref} equation in Mulliken notation]
+
+--|Begin.AllContras(2)
+	--|Begin.Contras(1)
+		@S2(w,x,a,b) <<= +8.0 @V2(b,x,w,a)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,a,b) <<= -4.0 @V2(b,w,x,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

@@ -1,0 +1,26 @@
+--|Title[The full-ic mrci sigma_{aaav}^{ccav} equation in Mulliken notation]
+
+--|Begin.AllContras(4)
+	--|Begin.Contras(2)
+		@W0(a0,a2,a1,a) <<= +1.0 @V2(a2,c1,c0,a1) @T2(c0,c1,a0,a)
+		@S2(i,j,k,a) <<= +1.0 @D3(k,i,a2,j,a1,a0) @W0(a0,a2,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(c1,c0,j,i) <<= +1.0 @V2(c1,a1,c0,a0) @D2(j,a1,i,a0)
+		@S2(i,j,k,a) <<= +1.0 @T2(c0,c1,k,a) @W1(c1,c0,j,i)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(a1,a) <<= +1.0 @V2(a1,c1,c0,a0) @T2(c0,c1,a0,a)
+		@S2(i,j,k,a) <<= -2.0 @D2(k,i,a1,j) @W2(a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(a1,a) <<= +1.0 @V2(a1,c1,c0,a0) @T2(c1,c0,a0,a)
+		@S2(i,j,k,a) <<= +1.0 @D2(k,i,a1,j) @W3(a1,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

@@ -1,0 +1,430 @@
+//
+//  Binary_Decomposition.cc
+//  
+//
+//  Created by Masaaki Saitow on 12/10/25.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#include <algorithm>
+#include <fstream>
+#include <cmath>
+#include <string>
+#include <boost/format.hpp>
+#include <SQreaktor.hpp>
+
+#define _IND_DEBUG_LVL1
+#define _IND_DEBUG_LVL2
+
+namespace femto {
+
+  // *********************************************************
+  // 
+  // *********************************************************
+  void SQreaktor::binary_decomposition(vector<SQterm> &theTerms)
+  {
+
+    if(LTensor_.get_indices().size() != 4 && isBareLHS_){
+      cout << "Argument 0 cannnot be treated as a bareampack .... " << endl;
+      abort();
+    } // End if
+
+    vector<SQindex*> Linds(LTensor_.get_indices());
+    for(vector<SQindex*>::iterator i = Linds.begin();i != Linds.end();++i)
+      if((*i)->get_isSummed()){
+        cout << *i << " in 0th argument is a kind of dummy index." << endl;
+        abort(); 
+      } // End if
+
+    for(vector<SQterm>::iterator t = theTerms.begin();t != theTerms.end();++t){
+      if(!t->get_isInCanonical()){
+        cout << "Term, " << *t << " is not in canonical form .... " << endl;
+        abort();
+      } // End if
+    } // End t
+
+    if(is_sfGen(LTensor_.get_name())){
+      cout << "Factorize: 1st argument cannot be a spin-free unitary group generator ... " << endl;
+      abort();
+    }
+    for(vector<SQterm>::iterator t = theTerms.begin();t != theTerms.end();++t){
+      for(size_t num_t = 0;num_t < t->get_tensors().size();++num_t){
+        if(is_sfGen(t->get_tensors()[num_t].get_name())){
+          cout << "Factorize: A spin-free unitary group generator is detected in the 2nd argument .... " << endl;
+          abort();
+	} // End if
+      } // End num_t
+    } // End t
+
+    binaries_.clear();
+
+    if(!theTerms.size()) return;
+
+    // Determine the type of term group. If this group is not of the terms with ERIs, binary contraction with
+    // no accompanying ERI has to be allowed. If not, only binary contractions with ERI are allowed.
+    bool ERIflag(false);
+    for(size_t num_t = 0;num_t < theTerms.begin()->get_tensors().size();++num_t)
+      if(theTerms.begin()->get_tensors()[num_t].get_name() == name_h2_) ERIflag = true;
+    if(ERIflag)
+      cout << ">> ERI is detected .... So, I gues all the terms contain too " << endl;
+    else
+      cout << ">> No ERI is detected .... So, I gues all the terms don't contain too " << endl;
+    cout << endl;
+
+    //SQtensor LTdummy(LTensor_); // Copy of LTensor_
+
+    // Convert term by term ....
+    int numTerm(0);
+    int Xnum(0); 
+    for(vector<SQterm>::iterator thisTerm = theTerms.begin();thisTerm != theTerms.end();++thisTerm, ++numTerm){
+
+      // Dummy of LTensor_ which is to be linked to *thisTerm
+      vector<SQtensor> temp_ten;
+      temp_ten.push_back(LTensor_);
+      vector<string> temp_coeff;
+      SQterm LTensor(1.0, temp_coeff, temp_ten);
+
+      // Firstly, set all the external indices and link to the LTensor
+      {
+        for(size_t num_t = 0;num_t < thisTerm->get_tensors().size();++num_t)
+          if     (thisTerm->get_tensors()[num_t].get_name() == name_h2_)
+	    thisTerm->get_tensors()[num_t].get_indices()[exth2_]->switch_isExt(true);
+          else if(thisTerm->get_tensors()[num_t].get_name() == name_amp_)
+	    thisTerm->get_tensors()[num_t].get_indices()[extamp_]->switch_isExt(true);
+          else if(thisTerm->get_tensors()[num_t].get_name() == name_d4_){
+	    thisTerm->get_tensors()[num_t].get_indices()[0]->switch_isExt(true);
+	    thisTerm->get_tensors()[num_t].get_indices()[1]->switch_isExt(true);
+	  } // End if
+
+        //*doesn't work*//if(kDeltas_[numTerm].size()){
+        //*doesn't work*//  for(size_t num = 0;num < kDeltas_[numTerm].size();++num){
+        //*doesn't work*//    vector<SQindex*> Dinds(kDeltas_[numTerm][num].get_summedBody());
+        //*doesn't work*//    vector<SQindex*> Linds(LTensor.get_summedBody());
+        //*doesn't work*//    SQindex* killer(NULL); // Points index to kill
+        //*doesn't work*//    SQindex* killed(NULL); // Ponts index to be killed
+        //*doesn't work*//    for(vector<SQindex*>::iterator i = Dinds.begin();i != Dinds.end();++i)
+	//*doesn't work*//      for(vector<SQindex*>::iterator j = Linds.begin();j != Linds.end();++j)
+        //*doesn't work*//        if     (**i == **j && *i == Dinds[0] && *Dinds[0] < *Dinds[1]) killer = *j;
+	//*doesn't work*//	else if(**i == **j && *i == Dinds[0] && *Dinds[0] > *Dinds[1]) killed = *j;
+	//*doesn't work*//	else if(**i == **j && *i == Dinds[1] && *Dinds[0] < *Dinds[1]) killer = *j;
+	//*doesn't work*//	else if(**i == **j && *i == Dinds[1] && *Dinds[0] > *Dinds[1]) killed = *j;
+	//*doesn't work*//    if(killer == NULL && killed == NULL){
+        //*doesn't work*//      cout << "Binary_Decomposition: Algorithmic error occured" << endl;
+        //*doesn't work*//      abort();
+	//*doesn't work*//    } // End if
+        //*doesn't work*//    *killed = *killer;
+	//*doesn't work*//  } // End num
+	//*doesn't work*//} // End if
+
+	vector<SQindex*> indices(thisTerm->get_summedBody());
+        for(size_t num_i = 0;num_i < LTensor.get_tensors()[0].get_indices().size();++num_i){
+          for(vector<SQindex*>::iterator j = indices.begin();j != indices.end();++j)
+	    if(LTensor.get_tensors()[0].get_indices()[num_i]->get_index() == (*j)->get_index())
+              LTensor.get_tensors()[0].put_indices(num_i, *j);
+	} // End num_i
+        if(isBareLHS_) LTensor.get_tensors()[0].get_indices()[extamp_]->switch_isExt(true);
+      }
+
+      // Determine the optimal way to construct intermediate if it is necessary.
+      vector<SQtensor> tensors(thisTerm->get_tensors());
+      if(tensors.size() <= 2){
+        vector<SQbinary> temp_bin;
+        temp_bin.push_back(SQbinary(thisTerm->get_numConst(), thisTerm->get_Consts(), LTensor.get_tensors()[0], tensors));
+        binaries_.push_back(temp_bin);
+        cout << boost::format("++ No. %5d :: ") % numTerm; 
+        count_order(temp_bin);
+        continue;
+      } // End if
+ 
+      vector<SQbinary> patterns;
+
+      // Informations about polynomial order
+      vector<int> iCores;
+      vector<int> iOccs;
+      vector<int> iVirts;
+      // Informations about memory requirement
+      vector<int> mCores;
+      vector<int> mOccs;
+      vector<int> mVirts;
+      vector<bool> V2_flag; // Stands for whether ERI can be loaded the first
+      int optimal_num;
+
+      if(tensors.size() >= 2){
+        size_t numCase = 0;
+	for(vector<SQtensor>::iterator t1 = tensors.begin();t1 != tensors.end();++t1){
+    	  for(vector<SQtensor>::iterator t2 = t1+1;t2 != tensors.end();++t2){
+            vector<SQtensor> new_ts;
+            vector<string> consts;
+            new_ts.push_back(*t1);
+            new_ts.push_back(*t2);
+
+	    // Evaluation of ERI has to be the top priority, if this term group has at least one ERI.
+            if(ERIflag)
+	      if(t2->get_name() != name_h2_ && t1->get_name() != name_h2_) {
+		cout << ">> " << *t1 << *t2 << " is skipped due to the priority << " << endl; 
+		continue;
+	      } // End if
+
+	    SQterm temp_t(1.0, consts, new_ts); 
+            vector<SQindex*> interm_ind;
+            vector<SQindex*> temp_summed(temp_t.get_summedBody());
+            for(vector<SQindex*>::iterator i = temp_summed.begin();i != temp_summed.end();++i){
+              if(!(temp_t.get_tensors()[0].hasIndex(*i) && temp_t.get_tensors()[1].hasIndex(*i) && (*i)->get_isSummed()))
+                interm_ind.push_back(*i);
+	    } // End i
+
+#ifdef _IND_DEBUG_LVL1
+            cout << *t1 << *t2 << endl;
+            for(vector<SQindex*>::iterator i = interm_ind.begin();i != interm_ind.end();++i) cout << **i << " ";
+            cout << endl;
+#endif
+
+            vector<SQindex*> temp_c;
+            vector<SQindex*> temp_o;
+            vector<SQindex*> temp_v;
+            for(vector<SQindex*>::iterator i = interm_ind.begin();i != interm_ind.end();++i){
+              if     ((*i)->get_char() == (char_state)core) temp_c.push_back(*i);
+              else if((*i)->get_char() == (char_state)act ) temp_o.push_back(*i);
+              else if((*i)->get_char() == (char_state)virt) temp_v.push_back(*i);
+              else {
+                cout << "Factorize: Unknown type of index detected .... " << endl;
+                abort();
+	      } // End if
+	    } // End i
+            interm_ind.clear();
+            interm_ind.insert(interm_ind.end(), temp_c.begin(), temp_c.end());
+            interm_ind.insert(interm_ind.end(), temp_o.begin(), temp_o.end());
+            interm_ind.insert(interm_ind.end(), temp_v.begin(), temp_v.end());
+
+            // Define intermediate as X and for now the permutational symmetry is not considered
+            Symmetry u;
+            IIvector u_pp;
+            Ivector u_p;
+            for(size_t i = 0;i < interm_ind.size();++i) u_p.push_back((int)i);
+            u_pp.push_back(u_p);
+            u.first = u_pp;
+            u.second.push_back(1);
+
+            ostringstream stm;
+            stm << Xnum;
+            SQtensor X(Interm_name()+stm.str(), interm_ind, u);
+
+            // Construct the binary contraction of thid possibility
+            patterns.push_back(SQbinary(1.0, consts, X, temp_t.get_tensors()));
+
+            cout << "Case " << numCase++ << patterns.back() << endl;
+            //for(size_t i = 0;i < X.get_indices().size();++i) cout << *X.get_indices()[i] << X.get_indices()[i] << "  "; //*TEST* 
+            //cout << endl; //*TEST* 
+
+            // Estimate the polynomial order of the first contraction
+            int nCore = 0, nOcc = 0, nVir = 0;
+            for(vector<SQindex*>::iterator i = temp_summed.begin();i != temp_summed.end();++i){
+              if     ((*i)->get_char() == (char_state)0) ++nCore;
+              else if((*i)->get_char() == (char_state)1) ++nOcc;
+              else if((*i)->get_char() == (char_state)2) ++nVir;
+	    } // End i
+
+            // Estimate the polynomial order of the second contraction
+            int nCtemp = 0, nOtemp = 0, nVtemp = 0;
+            vector<SQtensor> left_tensors;
+            for(vector<SQtensor>::iterator t = tensors.begin();t != tensors.end();++t){
+              if(!(*t==*t1) && !(*t==*t2)) left_tensors.push_back(*t);
+	    } // End t
+            vector<SQindex*> left_indices(interm_ind);
+            for(vector<SQtensor>::iterator t = left_tensors.begin();t != left_tensors.end();++t){
+              vector<SQindex*> inds = t->get_indices();
+              for(vector<SQindex*>::iterator i = inds.begin();i != inds.end();++i){
+                bool i_flag = false;
+                for(vector<SQindex*>::iterator j = left_indices.begin();j != left_indices.end();++j){
+                  if(**i == **j) i_flag = true;
+	        } // End j 
+                if(!i_flag) left_indices.push_back(*i);
+	      } // End i
+	    } // End t
+            for(vector<SQindex*>::iterator i = left_indices.begin();i != left_indices.end();++i){
+              if     ((*i)->get_char() == (char_state)0) ++nCtemp;
+              else if((*i)->get_char() == (char_state)1) ++nOtemp;
+              else if((*i)->get_char() == (char_state)2) ++nVtemp;              
+	    } // End i
+
+            // Determine the over all polynomial order
+            if(pow(numCore_, nCtemp)*pow(numOcc_, nOtemp)*pow(numVirt_, nVtemp) > pow(numCore_, nCore)*pow(numOcc_, nOcc)*pow(numVirt_, nVir))
+              { nCore = nCtemp; nOcc = nOtemp; nVir = nVtemp; }
+            string p_chars("! Polynomial order is O(");
+            if(nCore){
+              ostringstream stm;
+	      stm << nCore;
+              p_chars += "c^" + stm.str();
+	    } // End if
+            if(nOcc){
+              ostringstream stm;
+	      stm << nOcc;
+              p_chars += "o^" + stm.str();
+	    } // End if
+            if(nVir){
+              ostringstream stm;
+	      stm << nVir;
+              p_chars += "v^" + stm.str();
+	    } // End if            
+            p_chars += ")";
+            cout << p_chars << endl;
+
+            // Very bitchy, but definitely works ....
+            iCores.push_back(nCore);
+            iOccs.push_back(nOcc);
+            iVirts.push_back(nVir);
+
+            // Determine the manimum memory requirement
+            nCore = nOcc = nVir = 0;
+            for(vector<SQindex*>::iterator i = interm_ind.begin();i != interm_ind.end();++i){
+              if     ((*i)->get_char() == (char_state)0 && !(*i)->get_isExt()) ++nCore;
+              else if((*i)->get_char() == (char_state)1 && !(*i)->get_isExt()) ++nOcc;
+              else if((*i)->get_char() == (char_state)2 && !(*i)->get_isExt()) ++nVir;              
+	    } // End i
+
+            //*-- ??? --*// // Determine the V2_flag, which stands for whether the ERI can be loaded the first of all
+            //*-- ??? --*// if(h2_prior_){
+            //*-- ??? --*//   vector<SQtensor> ten(patterns.back().get_tensors());
+            //*-- ??? --*//   SQindex* the_ind(NULL); 
+            //*-- ??? --*//   for(vector<SQtensor>::iterator t = ten.begin();t != ten.end();++t){
+            //*-- ??? --*//     if(t->get_name() == name_h2_) the_ind = t->get_indices()[exth2_]; 
+ 	    //*-- ??? --*//   } // End t
+            //*-- ??? --*//   if(the_ind == NULL) V2_flag.push_back(true);
+            //*-- ??? --*//   else if(find(interm_ind.begin(), interm_ind.end(), the_ind) != interm_ind.end()){
+            //*-- ??? --*//     V2_flag.push_back(true); 
+	    //*-- ??? --*//   } // End if
+            //*-- ??? --*//   else {
+            //*-- ??? --*//     unsigned long int intSize
+	    //*-- ??? --*// 	  = pow(numCore_, nCore) * pow(numOcc_, nOcc) * pow(numVirt_, nVir);
+            //*-- ??? --*//     int numExt = 0;
+            //*-- ??? --*//     for(vector<SQindex*>::iterator i = interm_ind.begin();i != interm_ind.end();++i)
+            //*-- ??? --*//       if((*i)->get_isExt()) ++numExt;
+            //*-- ??? --*//     if(intSize > MaxSize_ && !numExt) V2_flag.push_back(false);
+            //*-- ??? --*//     else V2_flag.push_back(true);
+            //*-- ??? --*//   } // End else
+	    //*-- ??? --*// 
+	    //*-- ??? --*// } // End if
+            //*-- ??? --*// else V2_flag.push_back(true);
+
+            string q_chars("! Maximum memory usage is O(");
+            if(nCore){
+              ostringstream stm;
+	      stm << nCore;
+              q_chars += "c^" + stm.str();
+	    } // End if
+            if(nOcc){
+              ostringstream stm;
+	      stm << nOcc;
+              q_chars += "o^" + stm.str();
+	    } // End if
+            if(nVir){
+              ostringstream stm;
+	      stm << nVir;
+              q_chars += "v^" + stm.str();
+	    } // End if            
+            q_chars += ")";
+            cout << q_chars << endl;
+
+            mCores.push_back(nCore);
+            mOccs.push_back(nOcc);
+            mVirts.push_back(nVir);
+
+    	  } // End t2            
+	} // End t1
+
+        // After all, determine the optimal intermediate 
+        int mem_C = 1e+2, mem_O = 1e+2, mem_V = 1e+2;
+        int pol_C = 1e+2, pol_O = 1e+2, pol_V = 1e+2;
+        int mem_prior = 0, pol_prior = 0;
+        for(size_t num = 0;num < patterns.size();++num){
+          if(pow(numCore_, mem_C)*pow(numOcc_, mem_O)*pow(numVirt_, mem_V) > pow(numCore_, mCores[num])*pow(numOcc_, mOccs[num])*pow(numVirt_, mVirts[num])){
+            mem_C = mCores[num];
+            mem_O = mOccs[num];
+            mem_V = mVirts[num];
+            mem_prior = num;
+	  } // End if
+          if(pow(numCore_, pol_C)*pow(numOcc_, pol_O)*pow(numVirt_, pol_V) > pow(numCore_, iCores[num])*pow(numOcc_, iOccs[num])*pow(numVirt_, iVirts[num])){
+            pol_C = iCores[num];
+            pol_O = iOccs[num];
+            pol_V = iVirts[num];
+            pol_prior = num;
+	  } // End if
+	} // End num
+        cout << endl;
+        cout << "- MEM : " << mem_prior << endl; //*TEST* 
+        cout << "- POL : " << pol_prior << endl; //*TEST*
+        cout << endl;
+
+        if(mem_prior == pol_prior) optimal_num = mem_prior;
+        else{
+          cout << "Factorize: Conflict between choices of optimal memory usage and polynomial order ... " << endl; 
+	  if     (is_priority_ == (priority)0) optimal_num = pol_prior;
+	  else if(is_priority_ == (priority)1) optimal_num = mem_prior;
+	  else {
+	    cout << "Factorize: Invalid number is choosen as priority .... " << endl;
+	    abort();
+	  } // End if
+	} // End if
+
+        // Replace the old tensors by the new one
+        vector<SQtensor> new_ten;
+	vector<string> newConsts(thisTerm->get_Consts());
+        for(vector<SQtensor>::iterator t = tensors.begin();t != tensors.end();++t){
+          if(!(*t==patterns[optimal_num].get_Rtensors()[0]) && !(*t==patterns[optimal_num].get_Rtensors()[1]))
+            new_ten.push_back(*t);
+        } // End t
+        if(patterns[optimal_num].get_Ltensor().get_indices().size()){
+          new_ten.push_back(patterns[optimal_num].get_Ltensor());
+	}
+	else{
+	  newConsts.push_back(patterns[optimal_num].get_Ltensor().get_name());
+	}
+        vector<SQbinary> temp_bin;
+        temp_bin.push_back(patterns[optimal_num]);
+        temp_bin.push_back(SQbinary(thisTerm->get_numConst(), newConsts, LTensor.get_tensors()[0], new_ten));
+        binaries_.push_back(temp_bin);
+
+        //*-- ??? --*// if(patterns[optimal_num].get_Ltensor().get_indices().size())
+        //*-- ??? --*//   new_ten.push_back(intermediates[optimal_num]);
+        //*-- ??? --*// else {
+        //*-- ??? --*//   vector<string> newConsts(thisTerm->get_Consts());
+        //*-- ??? --*//   newConsts.push_back("X");
+        //*-- ??? --*//   thisTerm->set_Consts(newConsts);
+	//*-- ??? --*// } // End else
+        //*-- ??? --*// thisTerm->set_tensors(new_ten);
+	
+        //*-- ??? --*// // Retain the consistency between LTensor_ and thisTerm
+        //*-- ??? --*// vector<SQindex*> new_ind(thisTerm->get_summedBody());
+        //*-- ??? --*// for(vector<SQindex*>::iterator i = ref_indices.begin();i != ref_indices.end();++i){
+        //*-- ??? --*//   for(vector<SQindex*>::iterator j = new_ind.begin();j != new_ind.end();++j)
+        //*-- ??? --*//     if(**i==**j) LTensor_.put_indices((size_t)(i-ref_indices.begin()), *j);
+  	//*-- ??? --*//   } // End i
+
+	cout << boost::format("++ No. %5d :: ") % numTerm; 
+        count_order(temp_bin);
+	++Xnum;
+      } // End if
+
+      //LTensor_ = LTdummy;
+    } // End thisTerm
+
+    cout << "++ Terms are divided into a group of binary contractions :: " << endl;
+    int count(0);
+    for(vector<vector<SQbinary> >::iterator bs = binaries_.begin();bs != binaries_.end();++bs,++count){
+      cout << boost::format("[%5d] -- ") % count << bs->at(0) << endl;
+#ifdef _IND_DEBUG_LVL2
+      bs->at(0).print_summedBody();
+#endif       
+      if(bs->size() == 2){
+	cout << "        -- " << bs->at(1) << endl;
+#ifdef _IND_DEBUG_LVL2
+	bs->at(1).print_summedBody();
+        cout << endl;
+#endif       
+      } // End if
+      cout << endl;
+    } // End bs
+
+  }                                               
+
+} //End femto

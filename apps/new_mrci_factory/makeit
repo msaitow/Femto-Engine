@@ -1,0 +1,3 @@
+
+cd ~/Drops/femto && make -j 2 && cd ~/Drops/femto/apps/new_mrci_factory && touch ./mrci_factory.cc && make -j 2
+

@@ -1,0 +1,78 @@
+
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <boost/format.hpp>
+#include <femto.hpp>
+#include <SQterm.hpp>
+#include <SQindex.hpp>
+#include <SQtensor.hpp>
+#include <SQreaktor.hpp>
+#include <SQportal.hpp>
+
+using namespace std;
+
+///// Directory for the tensor files
+const std::string dirName("tensors/");
+femto::SQcont<std::pair<std::string, std::string> > LabelAndTensor; // <Label, Tensor file name>
+
+int main(){
+
+  femto::SQcont<string> nameT("aavv", "aaav", "ccvv", "cavv", "ccaa", "ccav", "caaa", "caav", "acav"); // Name of the tensor file name
+  femto::SQcont<string> nameF("oovv", "ooov", "ccvv", "covv", "ccoo", "ccov", "cooo", "coov", "ocov"); // Name of the source file name
+
+  //////////// Tensor files //////////////////////////////////////////////////////
+  for(auto i = nameT.begin();i != nameT.end();++i){
+    for(auto j = nameT.begin();j != nameT.end();++j){
+      ostringstream myTensorName;
+      myTensorName << "sigma_" << *i << "_" << *j;
+
+      string lFile(nameF[(size_t)(i-nameT.begin())]);
+      string rFile(nameF[(size_t)(j-nameT.begin())]);
+      ostringstream mySourceName;
+      mySourceName << "sigma_" << lFile << "_" << rFile;
+
+      LabelAndTensor <= std::make_pair(mySourceName.str(), myTensorName.str());
+    } // End j
+  } // End i
+//*//  LabelAndTensor <= std::make_pair("sigma_oovv_oovv", "sigma_aavv_aavv");
+//*//  LabelAndTensor <= std::make_pair("sigma_ooov_oovv", "sigma_aaav_aavv");
+//*//  LabelAndTensor <= std::make_pair("sigma_oovv_ooov", "sigma_aavv_aaav");
+//*//  LabelAndTensor <= std::make_pair("sigma_ooov_ooov", "sigma_aaav_aaav");
+//*//
+//*//  LabelAndTensor <= std::make_pair("sigma_ooov_cooo", "sigma_aaav_caaa");
+//*//  LabelAndTensor <= std::make_pair("sigma_cooo_ooov", "sigma_caaa_aaav");
+//*//  LabelAndTensor <= std::make_pair("sigma_cooo_cooo", "sigma_caaa_caaa");
+//*//  LabelAndTensor <= std::make_pair("sigma_ccvv_ccvv", "sigma_ccvv_ccvv");
+//*//
+//*//  LabelAndTensor <= std::make_pair("sigma_ccoo_ccoo", "sigma_ccaa_ccaa");
+//*//  LabelAndTensor <= std::make_pair("sigma_cooo_ccoo", "sigma_caaa_ccaa");
+//*//  LabelAndTensor <= std::make_pair("sigma_ccoo_cooo", "sigma_ccaa_caaa");
+  ////////////////////////////////////////////////////////////////////////////////
+
+  for(auto n = LabelAndTensor.begin();n != LabelAndTensor.end();++n){
+    vector<vector<femto::Core::SQbinary> > myBins;
+
+    ostringstream tensorFile;
+    tensorFile << dirName << n->second << ".tensor";
+ 
+    femto::Portal::SQportal myPortal(tensorFile.str(), "@S2", femto::Mulliken);
+    
+    myPortal.transportContractions(myBins, femto::Portal::NEW2);
+    if(!myBins.size()) continue; // Toriaezu
+
+    cout << endl << endl;
+    cout << "----------------------------------------------------------" << endl;
+    cout << "----------------------------------------------------------" << endl;
+    for(auto ts = myBins.begin();ts != myBins.end();++ts){
+      cout << boost::format(">> No. %d\n") % ((int)(ts-myBins.begin())+1);
+      femto::SQcont<femto::Core::SQbinary> temp(*ts);
+      cout << temp << endl << endl; 
+    } // End ts
+    
+    femto::Reaktor::SQreaktor gen(myBins, n->first, true, "V2", "T2"); // for aavv/aavv
+    gen.init_header("mrci_header");
+    gen.generate(femto::Reaktor::Orz, femto::Reaktor::Fafnir);
+  } // End n
+
+}

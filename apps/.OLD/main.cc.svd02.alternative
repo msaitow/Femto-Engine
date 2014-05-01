@@ -1,0 +1,201 @@
+
+#include <iostream>
+#include <vector>
+#include <boost/format.hpp>
+#include "femto.hpp"
+#include "SQterm.hpp"
+#include "SQindex.hpp"
+#include "SQtensor.hpp"
+
+using namespace std;
+
+int main(){
+
+//  femto::Cnum A(3,2);
+//  femto::Cnum B(2);
+//  femto::Cnum C(4,3);
+//    
+//  string Astr = C.to_string();
+//  cout << "A " << Astr << endl;
+//  
+//  A.print();
+//  
+//  cout << endl;
+//  
+//  B.print();
+//  cout << endl;
+//    
+//  femto::Cnum D = A * A * B;
+//  D.print();
+//  cout << endl;
+//  
+//  A += B;
+//  A.print();
+//  cout << endl;
+//  B.print();
+//  cout << endl;    
+//
+//  A *= C;
+//  A.print();
+//  cout << endl;
+//
+//  typedef boost::shared_ptr<femto::Cnum> shared_num;
+//  shared_num X(new femto::Cnum(2,3));
+//  std::vector<shared_num> num_vec;
+
+  femto::SQindex a("a", femto::core);
+  cout << endl;
+  cout << "a Index : " << a.get_index() << endl;
+  cout << "a Tag   : " << a.get_char() << endl;
+  cout << "a Sum?  : " << a.get_isSummed() << endl;
+  
+  femto::SQindex b("b", femto::act, true);
+  cout << endl;
+  cout << "b Index : " << b.get_index() << endl;
+  cout << "b Tag   : " << b.get_char() << endl;
+  cout << "a Sum?  : " << b.get_isSummed() << endl;
+
+  a=b;
+  cout << endl;
+  cout << "After copying .... " << endl;
+  cout << "Name changed to bbb" << endl; 
+  a.put_index("bbb");
+  cout << "a Index : " << a.get_index() << endl;
+  cout << "a Tag   : " << a.get_char() << endl;
+  cout << "a Sum?  : " << a.get_isSummed() << endl;
+
+  femto::SQindex c(a);
+  cout << endl;
+  cout << "CC .... " << endl;
+  cout << "c Index : " << c.get_index() << endl;
+  cout << "c Tag   : " << c.get_char() << endl;
+  cout << "c Sum?  : " << c.get_isSummed() << endl;
+  
+  femto::SQindex X = femto::SQindex("X", femto::core);
+  cout << endl;
+  cout << X.get_index() << endl;
+
+  cout << (femto::core==femto::act)  << endl;
+  cout << (femto::core==femto::virt) << endl;
+  cout << (femto::core==femto::core) << endl;
+  cout << X << endl;
+
+  std::vector<femto::SQindex*> K_indices;
+  femto::SQindex I = femto::SQindex("i", femto::act, true);
+  femto::SQindex J = femto::SQindex("j", femto::act, true);
+  femto::SQindex A = femto::SQindex("a", femto::virt);
+  femto::SQindex B = femto::SQindex("b", femto::virt);
+  K_indices.push_back(&I);
+  K_indices.push_back(&J);
+  K_indices.push_back(&A);
+  K_indices.push_back(&B);
+  
+  femto::Symmetry symm;
+  vector<int> s1;
+  for(int i = 0;i < 4;++i) s1.push_back(i);
+  //s1.push_back(3);
+  //s1.push_back(3);
+  //s1.push_back(3);
+  //s1.push_back(3);
+
+  symm.first.push_back(s1);
+  symm.second.push_back(1);
+
+  femto::SQtensor K("K", K_indices, symm);
+  cout << K << endl;
+
+  std::vector<femto::SQindex*> V_indices;
+  femto::SQindex C = femto::SQindex("c", femto::virt);
+  femto::SQindex D = femto::SQindex("d", femto::virt);
+  V_indices.push_back(&I);
+  V_indices.push_back(&J);
+  V_indices.push_back(&C);
+  V_indices.push_back(&D);
+  
+  femto::SQtensor V("V", V_indices, symm);
+  cout << V << endl;
+
+  vector<femto::SQindex*> vec = K.get_indices();
+  vec[0]->put_index("M");
+  cout << endl;
+  cout << K << endl;
+  cout << V << endl;
+
+  cout << endl;
+  cout << "After sorting K .... " << endl;
+  K.sortIndices();
+  cout << K << endl;
+
+  cout << endl;
+  cout << "After sorting V2 .... " << endl;
+  femto::Ivector S0; // {0,1,2,3}
+  S0.push_back(0);
+  S0.push_back(1); 
+  S0.push_back(2); 
+  S0.push_back(3); 
+
+  femto::Ivector S1; //{2,1,0,3};
+  S1.push_back(2);
+  S1.push_back(1); 
+  S1.push_back(0); 
+  S1.push_back(3); 
+
+  femto::Ivector S2; //{0,3,2,1};
+  S2.push_back(0);
+  S2.push_back(3); 
+  S2.push_back(2); 
+  S2.push_back(1); 
+
+  femto::Ivector S3; //{1,0,3,2};
+  S3.push_back(1);
+  S3.push_back(0); 
+  S3.push_back(3); 
+  S3.push_back(2); 
+
+  femto::Ivector fac; //{1, 1, 1, 1};
+  fac.push_back(1);
+  fac.push_back(1);
+  fac.push_back(1);
+  fac.push_back(1);
+
+  femto::Symmetry V2_sym;
+  V2_sym.first.push_back(S0);
+  V2_sym.first.push_back(S1);
+  V2_sym.first.push_back(S2);
+  V2_sym.first.push_back(S3);
+
+  V2_sym.second.insert(V2_sym.second.end(), fac.begin(), fac.end());
+//   for(femto::Ivector::iterator it = V2_sym.second.begin();it < V2_sym.second.end();++it)
+//     cout << *it << endl;
+
+  femto::SQtensor V2("V2", V_indices, V2_sym);
+  V2.sortIndices();
+  cout << V2 << endl;
+
+  cout << endl;
+  cout << "After sorting V2' .... " << endl;
+
+  vector<femto::SQindex*> Vp_indices;
+  Vp_indices.push_back(&D);
+  Vp_indices.push_back(&C);
+  Vp_indices.push_back(&J);
+  Vp_indices.push_back(&I);
+
+  femto::SQtensor V2p("V2'", Vp_indices, V2_sym);
+  cout << "(Before sort ..... " << V2p << ")" << endl;
+  V2p.sortIndices();
+  cout << V2p << endl;
+  V2.print_symm();
+
+  cout << endl;
+  cout << "Term test .... " << endl;
+  vector<string> consts;
+  consts.push_back("");
+
+  vector<femto::SQtensor> tensors;
+  tensors.push_back(V2);
+  tensors.push_back(K);
+
+  femto::SQterm term(1.0, consts, tensors);
+  cout << term << endl;
+}

@@ -1,0 +1,36 @@
+--|Title[The full-ic mrci sigma_{aavv}^{acav} equation in Mulliken notation]
+
+--|Begin.AllContras(6)
+	--|Begin.Contras(2)
+		@W0(c0,j,i,a1,a0,a) <<= +1.0 @V2(c0,a2,a3,a) @D3(j,a2,i,a3,a1,a0)
+		@S2(i,j,a,b) <<= -1.0 @T2(a0,c0,a1,b) @W0(c0,j,i,a1,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(c0,j,i,a1,a0,b) <<= +1.0 @V2(b,a2,c0,a3) @D3(j,a2,i,a3,a1,a0)
+		@S2(i,j,a,b) <<= -1.0 @T2(c0,a0,a,a1) @W1(c0,j,i,a1,a0,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(a0,a2,b,a) <<= +1.0 @V2(a2,a,c0,a1) @T2(a0,c0,a1,b)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a0,i,a2) @W2(a0,a2,b,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(a0,a1,a,b) <<= +1.0 @V2(b,a1,c0,a2) @T2(c0,a0,a,a2)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a1,i,a0) @W3(a0,a1,a,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(a0,a2,a,b) <<= +1.0 @V2(b,a1,c0,a2) @T2(c0,a0,a,a1)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a0,i,a2) @W4(a0,a2,a,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(a0,a1,b,a) <<= +1.0 @V2(a1,c0,a2,a) @T2(a0,c0,a2,b)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a1,i,a0) @W5(a0,a1,b,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

@@ -1,0 +1,63 @@
+
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <boost/format.hpp>
+#include <femto.hpp>
+#include <SQterm.hpp>
+#include <SQindex.hpp>
+#include <SQtensor.hpp>
+#include <SQreaktor.hpp>
+
+using namespace std;
+
+int main(){
+
+  std::vector<femto::Core::SQindex*> EL_indices;
+  std::vector<femto::Core::SQindex*> ER_indices;
+  std::vector<femto::Core::SQindex*> ET_indices;
+
+  femto::Core::SQindex A("a", femto::virt);
+  femto::Core::SQindex B("b", femto::virt, true);
+  femto::Core::SQindex C("c", femto::virt);
+  femto::Core::SQindex D("d", femto::virt, true);
+
+  cout << "A : " << A << endl;
+  cout << "B : " << B << endl;
+  cout << "C : " << C << endl;
+  cout << "D : " << D << endl << endl;
+
+  femto::Core::SQindex I("i", femto::act);
+  femto::Core::SQindex J("j", femto::act, true);
+  femto::Core::SQindex K("k", femto::act);
+  femto::Core::SQindex L("l", femto::act, true);
+
+  cout << "I : " << I << endl;
+  cout << "J : " << J << endl;
+  cout << "K : " << K << endl;
+  cout << "L : " << L << endl << endl;
+
+  vector<femto::Core::SQindex> Ps;
+  vector<femto::Core::SQindex> Qs;
+  vector<femto::Core::SQindex> Rs;
+  vector<femto::Core::SQindex> Ss;
+  for(size_t space = 0;space < 10;++space){
+    cout << " :::::::::::::: " << space << " :::::::::::::::" << endl;
+    if((femto::char_state)space == femto::aux) continue;
+    Ps.push_back(femto::Core::SQindex("p", (femto::char_state)space, true));
+    Qs.push_back(femto::Core::SQindex("q", (femto::char_state)space, true));
+    Rs.push_back(femto::Core::SQindex("r", (femto::char_state)space, true));
+    Ss.push_back(femto::Core::SQindex("s", (femto::char_state)space, true));
+
+    cout << "P : " << Ps.back() << endl;
+    cout << "Q : " << Qs.back() << endl;
+    cout << "R : " << Rs.back() << endl;
+    cout << "S : " << Ss.back() << endl << endl;
+
+  }
+
+  femto::Core::SQindex X("x", femto::char_state(-1));
+  cout << "X ::: " << X << endl;
+
+}
+

@@ -1,0 +1,159 @@
+
+#include <iostream>
+#include <vector>
+#include <boost/format.hpp>
+#include "femto.hpp"
+#include "SQterm.hpp"
+#include "SQindex.hpp"
+#include "SQtensor.hpp"
+
+using namespace std;
+
+int main(){
+
+  std::vector<femto::SQindex*> K_indices;
+  femto::SQindex A = femto::SQindex("a", femto::act, true);
+  femto::SQindex B = femto::SQindex("b", femto::act, true);
+  femto::SQindex C = femto::SQindex("c", femto::act, true);
+  femto::SQindex D = femto::SQindex("d", femto::act, true);
+
+  K_indices.push_back(&A);
+  K_indices.push_back(&B);
+  K_indices.push_back(&C);
+  K_indices.push_back(&D);
+  
+  femto::Symmetry symm;
+  vector<int> s1;
+  for(int i = 0;i < 4;++i) s1.push_back(i);
+
+  symm.first.push_back(s1);
+  symm.second.push_back(1);
+
+  femto::SQtensor T2("T2", K_indices, symm);
+  cout << T2 << endl;
+
+  std::vector<femto::SQindex*> V_indices;
+  femto::SQindex Ak = femto::SQindex("Ak", femto::act);
+  femto::SQindex Va = femto::SQindex("Va", femto::virt);
+  V_indices.push_back(&Ak);
+  V_indices.push_back(&C);
+  V_indices.push_back(&Va);
+  V_indices.push_back(&D);
+  
+  cout << endl;
+  cout << "After sorting T2 .... " << endl;
+  T2.sortIndices();
+  cout << T2 << endl;
+
+  cout << endl;
+  cout << "After sorting V2 .... " << endl;
+  femto::Ivector S0; // {0,1,2,3}
+  S0.push_back(0);
+  S0.push_back(1); 
+  S0.push_back(2); 
+  S0.push_back(3); 
+
+  femto::Ivector S1; //{2,1,0,3};
+  S1.push_back(2);
+  S1.push_back(1); 
+  S1.push_back(0); 
+  S1.push_back(3); 
+
+  femto::Ivector S2; //{0,3,2,1};
+  S2.push_back(0);
+  S2.push_back(3); 
+  S2.push_back(2); 
+  S2.push_back(1); 
+
+  femto::Ivector S3; //{1,0,3,2};
+  S3.push_back(1);
+  S3.push_back(0); 
+  S3.push_back(3); 
+  S3.push_back(2); 
+
+  femto::Ivector fac; //{1, 1, 1, 1};
+  fac.push_back(1);
+  fac.push_back(1);
+  fac.push_back(1);
+  fac.push_back(1);
+
+  femto::Symmetry V2_sym;
+  V2_sym.first.push_back(S0);
+  V2_sym.first.push_back(S1);
+  V2_sym.first.push_back(S2);
+  V2_sym.first.push_back(S3);
+
+  V2_sym.second.insert(V2_sym.second.end(), fac.begin(), fac.end());
+//   for(femto::Ivector::iterator it = V2_sym.second.begin();it < V2_sym.second.end();++it)
+//     cout << *it << endl;
+
+  femto::SQtensor V2("V2", V_indices, V2_sym);
+  V2.sortIndices();
+  cout << V2 << endl;
+
+  cout << endl;
+  cout << "After sorting V2' .... " << endl;
+
+  vector<femto::SQindex*> E_indices;
+  femto::SQindex Ai = femto::SQindex("Ai", femto::act);
+  femto::SQindex Aj = femto::SQindex("Aj", femto::act);
+  E_indices.push_back(&Ai);
+  E_indices.push_back(&A);
+  E_indices.push_back(&Aj);
+  E_indices.push_back(&B);
+
+  femto::sfGen E2(E_indices);
+  E2.sortIndices();
+
+  cout << endl;
+  cout << "Term test .... " << endl;
+  vector<string> consts;
+  consts.push_back("");
+
+  vector<femto::SQtensor> tensors;
+  tensors.push_back(V2);
+  tensors.push_back(T2);
+  tensors.push_back(E2);
+
+  femto::SQterm term1(1.0, consts, tensors);
+  //  cout << "First .... " << endl;
+  //  cout << term1 << endl;
+  //  cout << "Second .... " << endl;
+  //  term1.set_tensors(tensors);
+  //  cout << term1 << endl;
+
+//   cout << endl;
+//   cout << "Print V2 again .... " << endl;
+//   cout << V2 << endl;
+
+//   cout << endl;
+//   vector<string> consts2;
+//   consts2.push_back("");
+
+//   femto::SQterm term2(2.0, consts2, tensors);
+//   cout << term2 << endl;
+//   cout << (isAdditive(term1, term2) ? "YES!" : "NO") << endl;
+  
+//   cout << endl;
+//   femto::SQterm term3;//(term1+term2);
+//   term3 = term1 + term2;
+//   cout << term3 << endl;
+
+//   cout << endl;
+//   femto::SQterm term4;//(term3*term2);
+//   term4 = term3 * term2;
+//   cout << term4 << endl;
+
+//   cout << endl;
+//   cout << (term1 == term2 ? "YES!!!" : "NO!!!") << endl;
+
+  cout << endl;
+  cout << "Normal order test .... " << endl;
+  cout << "inTerm .... " << endl;
+  cout << term1 << endl;
+  vector<femto::SQterm> retval = femto::normalOrder(term1); 
+  cout << "outTerms .... " << endl;
+  vector<femto::SQterm>::iterator term = retval.begin();
+  for(;term != retval.end();++term)
+    cout << *term << endl;
+}

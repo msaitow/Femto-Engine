@@ -1,0 +1,74 @@
+--|Title[The full-ic mrci sigma_{aavv}^{aaav} equation in Mulliken notation]
+
+--|Begin.AllContras(14)
+	--|Begin.Contras(2)
+		@W0(j,i,a3,b) <<= +1.0 @T2(a0,a1,a2,b) @D3(j,a1,i,a3,a2,a0)
+		@S2(i,j,a,b) <<= +1.0 @Fcore(a3,a) @W0(j,i,a3,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(j,i,a3,a) <<= +1.0 @T2(a1,a0,a,a2) @D3(j,a3,i,a1,a2,a0)
+		@S2(i,j,a,b) <<= +1.0 @Fcore(b,a3) @W1(j,i,a3,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(j,i,a2,a) <<= +1.0 @T2(a1,a0,a2,a) @D2(j,a1,i,a0)
+		@S2(i,j,a,b) <<= +1.0 @Fcore(b,a2) @W2(j,i,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(j,i,a2,b) <<= +1.0 @T2(a0,a1,a2,b) @D2(j,a1,i,a0)
+		@S2(i,j,a,b) <<= +1.0 @Fcore(a2,a) @W3(j,i,a2,b)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(i,j,a,b) <<= +1.0 @T2(a0,a1,a2,b) @C5(a2,a0,j,a1,i,a)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(i,j,a,b) <<= +1.0 @T2(a1,a0,a,a2) @C5(a2,a0,i,a1,j,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(j,i,a1,a0,a2,a) <<= +1.0 @V2(a2,a4,a3,a) @D3(j,a1,i,a3,a4,a0)
+		@S2(i,j,a,b) <<= +1.0 @T2(a1,a0,b,a2) @W4(j,i,a1,a0,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(j,i,a1,a0,a2,b) <<= +1.0 @V2(b,a3,a4,a2) @D3(j,a3,i,a1,a4,a0)
+		@S2(i,j,a,b) <<= +1.0 @T2(a1,a0,a,a2) @W5(j,i,a1,a0,a2,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(j,i,a1,a0,a3,b) <<= +1.0 @V2(b,a3,a4,a2) @D3(j,a1,i,a0,a4,a2)
+		@S2(i,j,a,b) <<= +1.0 @T2(a1,a0,a3,a) @W6(j,i,a1,a0,a3,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(j,i,a1,a0,a3,a) <<= +1.0 @V2(a3,a,a4,a2) @D3(j,a1,i,a0,a4,a2)
+		@S2(i,j,a,b) <<= +1.0 @T2(a1,a0,b,a3) @W7(j,i,a1,a0,a3,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W8(j,i,a3,v0) <<= +1.0 @T2(a0,a1,a2,v0) @D3(j,a1,i,a3,a2,a0)
+		@S2(i,j,a,b) <<= +1.0 @V2(v0,b,a3,a) @W8(j,i,a3,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W9(j,i,a3,v0) <<= +1.0 @T2(a0,a1,a2,v0) @D3(j,a3,i,a1,a2,a0)
+		@S2(i,j,a,b) <<= +1.0 @V2(v0,a,b,a3) @W9(j,i,a3,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W10(a1,a0,b,a) <<= +1.0 @V2(b,v0,a2,a) @T2(a1,a0,v0,a2)
+		@S2(i,j,a,b) <<= +1.0 @D2(j,a1,i,a0) @W10(a1,a0,b,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W11(a1,a0,b,a) <<= +1.0 @V2(b,a2,v0,a) @T2(a1,a0,a2,v0)
+		@S2(i,j,a,b) <<= +1.0 @D2(j,a1,i,a0) @W11(a1,a0,b,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

@@ -1,0 +1,66 @@
+--|Title[The full-ic mrci sigma_{ccav}^{cavv} equation in Mulliken notation]
+
+--|Begin.AllContras(12)
+	--|Begin.Contras(2)
+		@W0(x,i,a0,v0) <<= +1.0 @V2(x,a2,v0,a1) @D2(i,a1,a0,a2)
+		@S2(w,x,i,a) <<= +1.0 @T2(w,a0,v0,a) @W0(x,i,a0,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(w,i,a0,v0) <<= +1.0 @V2(w,a2,v0,a1) @D2(i,a2,a0,a1)
+		@S2(w,x,i,a) <<= +1.0 @T2(x,a0,v0,a) @W1(w,i,a0,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(x,a0,i,v0) <<= +1.0 @V2(x,i,v0,a1) @D1(a1,a0)
+		@S2(w,x,i,a) <<= +1.0 @T2(w,a0,v0,a) @W2(x,a0,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(w,a0,i,v0) <<= +1.0 @V2(w,i,v0,a1) @D1(a1,a0)
+		@S2(w,x,i,a) <<= -2.0 @T2(x,a0,v0,a) @W3(w,a0,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(w,a0,i,v0) <<= +1.0 @V2(w,a1,v0,i) @D1(a1,a0)
+		@S2(w,x,i,a) <<= +1.0 @T2(x,a0,v0,a) @W4(w,a0,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(x,a0,i,v0) <<= +1.0 @V2(x,a1,v0,i) @D1(a1,a0)
+		@S2(w,x,i,a) <<= -2.0 @T2(w,a0,v0,a) @W5(x,a0,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(w,i,a0,v0) <<= +1.0 @V2(w,a2,v0,a1) @D2(i,a2,a0,a1)
+		@S2(w,x,i,a) <<= -2.0 @T2(a0,x,v0,a) @W6(w,i,a0,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(x,i,a0,v0) <<= +1.0 @V2(x,a2,v0,a1) @D2(i,a2,a0,a1)
+		@S2(w,x,i,a) <<= +1.0 @T2(a0,w,v0,a) @W7(x,i,a0,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W8(w,a0,i,v0) <<= +1.0 @V2(w,i,v0,a1) @D1(a1,a0)
+		@S2(w,x,i,a) <<= +4.0 @T2(a0,x,v0,a) @W8(w,a0,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W9(x,a0,i,v0) <<= +1.0 @V2(x,i,v0,a1) @D1(a1,a0)
+		@S2(w,x,i,a) <<= -2.0 @T2(a0,w,v0,a) @W9(x,a0,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W10(w,a0,i,v0) <<= +1.0 @V2(w,a1,v0,i) @D1(a1,a0)
+		@S2(w,x,i,a) <<= -2.0 @T2(a0,x,v0,a) @W10(w,a0,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W11(x,a0,i,v0) <<= +1.0 @V2(x,a1,v0,i) @D1(a1,a0)
+		@S2(w,x,i,a) <<= +1.0 @T2(a0,w,v0,a) @W11(x,a0,i,v0)
+	--|End.Contras
+
+
+--|End.AllContras
+

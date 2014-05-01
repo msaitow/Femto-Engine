@@ -1,0 +1,169 @@
+
+#include <iostream>
+#include <vector>
+#include <list>
+#include <boost/format.hpp>
+#include "femto.hpp"
+#include "SQterm.hpp"
+#include "SQindex.hpp"
+#include "SQtensor.hpp"
+
+using namespace std;
+
+int main(){
+
+//*TEST*  femto::IIvector temp = femto::makePermutations(4);
+//*TEST*  cout << "permTest" << endl;
+//*TEST*  for(size_t i = 0;i < temp.size();++i){
+//*TEST*    for(size_t j = 0;j < temp[i].size();++j) cout << temp[i][j] << " ";
+//*TEST*    cout << endl;
+//*TEST*  }
+//*TEST*  cout << endl;
+
+  std::vector<femto::SQindex*> E1_indices;
+  std::vector<femto::SQindex*> E2_indices;
+
+  femto::SQindex A = femto::SQindex("a", femto::virt);
+  femto::SQindex B = femto::SQindex("b", femto::virt, true);
+  femto::SQindex C = femto::SQindex("c", femto::virt);
+  femto::SQindex D = femto::SQindex("d", femto::virt, true);
+
+  femto::SQindex I = femto::SQindex("i", femto::act);
+  femto::SQindex J = femto::SQindex("j", femto::act, true);
+  femto::SQindex K = femto::SQindex("k", femto::act);
+  femto::SQindex L = femto::SQindex("l", femto::act, true);
+
+//*OLD*   femto::SQindex P = femto::SQindex("p", femto::act, true);
+//*OLD*   femto::SQindex Q = femto::SQindex("q", femto::act, true);
+//*OLD*   femto::SQindex R = femto::SQindex("r", femto::act, true);
+//*OLD*   femto::SQindex S = femto::SQindex("s", femto::act, true);
+
+  vector<femto::SQindex> Ps;
+  vector<femto::SQindex> Qs;
+  vector<femto::SQindex> Rs;
+  vector<femto::SQindex> Ss;
+  for(size_t space = 1;space < 3;++space){
+    Ps.push_back(femto::SQindex("p", (femto::char_state)space, true));
+    Qs.push_back(femto::SQindex("q", (femto::char_state)space, true));
+    Rs.push_back(femto::SQindex("r", (femto::char_state)space, true));
+    Ss.push_back(femto::SQindex("s", (femto::char_state)space, true));
+  }
+
+  E1_indices.push_back(&I);
+  E1_indices.push_back(&K);  
+  E1_indices.push_back(&A);
+  E1_indices.push_back(&C);  
+
+  E2_indices.push_back(&B);
+  E2_indices.push_back(&D);
+  E2_indices.push_back(&J);
+  E2_indices.push_back(&L);
+
+  femto::sfGen E1(E1_indices);
+  femto::sfGen E2(E2_indices);
+
+  femto::Symmetry S2_symm;
+  femto::Ivector S2_0;
+  S2_0.push_back(0);
+  S2_0.push_back(1);
+  S2_0.push_back(2);
+  S2_0.push_back(3);
+  S2_symm.first.push_back(S2_0);
+  S2_symm.second.push_back(1);
+  femto::SQtensor Tamp("T2", E2_indices, S2_symm);
+
+//*OLD*   E3_indices.push_back(&P);
+//*OLD*   E3_indices.push_back(&Q);
+//*OLD*   E3_indices.push_back(&R);
+//*OLD*   E3_indices.push_back(&S);
+
+  vector<string> coeff1;
+  coeff1.push_back("");
+
+  femto::Symmetry h1_symm;
+
+  femto::Ivector h0; // {0,1}
+  h0.push_back(0);
+  h0.push_back(1);
+
+  femto::Ivector h1; // {1,0}
+  h1.push_back(1);
+  h1.push_back(0);
+ 
+  h1_symm.first.push_back(h0);
+  h1_symm.first.push_back(h1);
+  h1_symm.second.push_back(1);
+  h1_symm.second.push_back(1);
+
+  femto::Symmetry V2_symm;
+
+  femto::Ivector S0; // {0,1,2,3}
+  S0.push_back(0);
+  S0.push_back(1); 
+  S0.push_back(2); 
+  S0.push_back(3); 
+
+  femto::Ivector S1; //{2,1,0,3};
+  S1.push_back(2);
+  S1.push_back(1); 
+  S1.push_back(0); 
+  S1.push_back(3); 
+
+  femto::Ivector S2; //{0,3,2,1};
+  S2.push_back(0);
+  S2.push_back(3); 
+  S2.push_back(2); 
+  S2.push_back(1); 
+
+  femto::Ivector S3; //{1,0,3,2};
+  S3.push_back(1);
+  S3.push_back(0); 
+  S3.push_back(3); 
+  S3.push_back(2); 
+
+  V2_symm.first.push_back(S0);
+  V2_symm.first.push_back(S1);
+  V2_symm.first.push_back(S2);
+  V2_symm.first.push_back(S3);
+
+  V2_symm.second.push_back(1);
+  V2_symm.second.push_back(1);
+  V2_symm.second.push_back(1);
+  V2_symm.second.push_back(1);
+
+  vector<femto::SQterm> result; result.reserve(10000);
+
+  // Two-body part ....
+  for(int i = 0;i < 10000;++i){
+    for(vector<femto::SQindex>::iterator p = Ps.begin();p != Ps.end();++p){
+      for(vector<femto::SQindex>::iterator q = Qs.begin();q != Qs.end();++q){
+        for(vector<femto::SQindex>::iterator r = Rs.begin();r != Rs.end();++r){
+          for(vector<femto::SQindex>::iterator s = Ss.begin();s != Ss.end();++s){
+  
+            std::vector<femto::SQindex*> E3_indices;
+            E3_indices.push_back(&(*p));
+            E3_indices.push_back(&(*q));
+            E3_indices.push_back(&(*r));
+            E3_indices.push_back(&(*s));
+  
+            femto::SQtensor V("V2", E3_indices, V2_symm);
+            femto::sfGen E3(E3_indices);
+  
+            // < Psi | E1 h E3 T2 E2 | Psi >
+            vector<femto::SQtensor> ten1;
+            ten1.push_back(E1);
+            ten1.push_back(V);
+            ten1.push_back(E3);
+            ten1.push_back(Tamp);
+            ten1.push_back(E2);
+                  
+            result.push_back(femto::SQterm(0.5, coeff1, ten1));
+  
+          } // End s
+        } // End r
+      } // End q
+    } // End p
+  } // End i
+
+}
+

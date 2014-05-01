@@ -1,0 +1,31 @@
+--|Title[The full-ic mrci sigma_{ref}^{caav} equation in Mulliken notation]
+
+--|Begin.AllContras(5)
+	--|Begin.Contras(2)
+		@W0(c0,a1,a0,v0) <<= +1.0 @D1(a1,a0) @Fcore(v0,c0)
+		@S0() <<= -1.0 @T2(c0,a1,a0,v0) @W0(c0,a1,a0,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(c0,a1,a0,v0) <<= +1.0 @V2(v0,c0,a3,a2) @D2(a3,a2,a1,a0)
+		@S0() <<= -1.0 @T2(c0,a1,a0,v0) @W1(c0,a1,a0,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(c0,a1,a0,v0) <<= +1.0 @V2(v0,a3,c0,a2) @D2(a3,a0,a1,a2)
+		@S0() <<= -1.0 @T2(c0,a0,a1,v0) @W2(c0,a1,a0,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(c0,a0,a1,v0) <<= +1.0 @V2(v0,a2,c0,a1) @D1(a2,a0)
+		@S0() <<= +2.0 @T2(c0,a0,a1,v0) @W3(c0,a0,a1,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(c0,a0,a1,v0) <<= +1.0 @V2(v0,c0,a2,a1) @D1(a2,a0)
+		@S0() <<= -1.0 @T2(c0,a0,a1,v0) @W4(c0,a0,a1,v0)
+	--|End.Contras
+
+
+--|End.AllContras
+

@@ -1,0 +1,16 @@
+--|Title[The zeroth-order ct residual_{aaav}^{aavv} equation in Mulliken notation]
+
+--|Begin.AllContras(2)
+	--|Begin.Contras(2)
+		@W0(a1,a0,k,a) <<= +1.0 @T2(a0,a1,v0,a) @cF(v0,k)
+		@S2(i,j,k,a) <<= +4.0 @D2(j,a1,i,a0) @W0(a1,a0,k,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(a1,a0,a2,a) <<= +1.0 @T2(a0,a1,v0,a) @cF(v0,a2)
+		@S2(i,j,k,a) <<= +2.0 @D3(k,i,a1,j,a0,a2) @W1(a1,a0,a2,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

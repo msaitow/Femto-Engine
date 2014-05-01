@@ -1,0 +1,34 @@
+--|Title[The ct residual_{ccaa}^{ref} equation in Mulliken notation]
+
+--|Begin.AllContras(7)
+	--|Begin.Contras(1)
+		@S2(x,w,j,i) <<= -4.0 @V2(i,w,x,a0) @D1(j,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(x,w,j,i) <<= +2.0 @V2(i,x,w,a0) @D1(j,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,i,j) <<= -4.0 @V2(j,x,w,a0) @D1(i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,i,j) <<= +2.0 @V2(j,w,x,a0) @D1(i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,i,j) <<= +8.0 @V2(j,x,w,i)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,i,j) <<= -4.0 @V2(j,w,x,i)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,i,j) <<= +2.0 @V2(x,a1,w,a0) @D2(j,a1,i,a0)
+	--|End.Contras
+
+
+--|End.AllContras
+

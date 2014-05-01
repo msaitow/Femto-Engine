@@ -1,0 +1,42 @@
+--|Title[The zeroth-order ct residual_{ccvv}^{ccav} equation in Mulliken notation]
+
+--|Begin.AllContras(8)
+	--|Begin.Contras(2)
+		@W0(a0,a) <<= +1.0 @D1(a1,a0) @cF(a1,a)
+		@S2(w,x,a,b) <<= -2.0 @T2(w,x,a0,b) @W0(a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(a0,a) <<= +1.0 @D1(a1,a0) @cF(a1,a)
+		@S2(w,x,a,b) <<= +1.0 @T2(x,w,a0,b) @W1(a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,a,b) <<= +8.0 @T2(w,x,a0,b) @cF(a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,a,b) <<= -4.0 @T2(x,w,a0,b) @cF(a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(a0,b) <<= +1.0 @D1(a1,a0) @cF(b,a1)
+		@S2(w,x,a,b) <<= -2.0 @T2(x,w,a0,a) @W2(a0,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(a0,b) <<= +1.0 @D1(a1,a0) @cF(b,a1)
+		@S2(w,x,a,b) <<= +1.0 @T2(x,w,a,a0) @W3(a0,b)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,a,b) <<= +8.0 @T2(x,w,a0,a) @cF(b,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,a,b) <<= -4.0 @T2(x,w,a,a0) @cF(b,a0)
+	--|End.Contras
+
+
+--|End.AllContras
+

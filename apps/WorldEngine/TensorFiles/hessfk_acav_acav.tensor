@@ -1,0 +1,61 @@
+--|Title[The zeroth-order ct residual_{acav}^{acav} equation in Mulliken notation]
+
+--|Begin.AllContras(11)
+	--|Begin.Contras(2)
+		@W0(j,a1,a0,i) <<= +1.0 @D2(j,a2,a1,a0) @cF(i,a2)
+		@S2(i,w,j,a) <<= -2.0 @T2(a1,w,a0,a) @W0(j,a1,a0,i)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(a0,i) <<= +1.0 @D1(a1,a0) @cF(i,a1)
+		@S2(i,w,j,a) <<= -2.0 @T2(a0,w,j,a) @W1(a0,i)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(c0,j,i,a) <<= +1.0 @T2(a1,c0,a0,a) @D2(j,i,a1,a0)
+		@S2(i,w,j,a) <<= -4.0 @W2(c0,j,i,a) @cF(w,c0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(c0,i,j,a) <<= +1.0 @T2(a0,c0,j,a) @D1(i,a0)
+		@S2(i,w,j,a) <<= -4.0 @W3(c0,i,j,a) @cF(w,c0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(i,a1,a0,j) <<= +1.0 @D2(i,a2,a1,a0) @cF(j,a2)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,a1,a) @W4(i,a1,a0,j)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(w,i,a1,a) <<= +1.0 @T2(a0,w,a1,a) @D1(i,a0)
+		@S2(i,w,j,a) <<= +4.0 @W5(w,i,a1,a) @cF(j,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(w,j,i,v0) <<= +1.0 @T2(w,a1,v0,a0) @D2(j,i,a1,a0)
+		@S2(i,w,j,a) <<= +4.0 @W6(w,j,i,v0) @cF(v0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(w,i,j,v0) <<= +1.0 @T2(w,a0,v0,j) @D1(i,a0)
+		@S2(i,w,j,a) <<= +4.0 @W7(w,i,j,v0) @cF(v0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W8(j,a0,i,a1) <<= +1.0 @D2(j,i,a0,a2) @cF(a2,a1)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,a1,a) @W8(j,a0,i,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W9(j,i,a0,a1) <<= +1.0 @D2(j,i,a2,a0) @cF(a2,a1)
+		@S2(i,w,j,a) <<= -2.0 @T2(a1,w,a0,a) @W9(j,i,a0,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W10(i,a0) <<= +1.0 @D1(i,a1) @cF(a1,a0)
+		@S2(i,w,j,a) <<= -2.0 @T2(a0,w,j,a) @W10(i,a0)
+	--|End.Contras
+
+
+--|End.AllContras
+

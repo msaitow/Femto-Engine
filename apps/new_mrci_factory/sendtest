@@ -1,0 +1,6 @@
+
+rm ./test2014/*
+cp ./f_sigma_oovv_oovv.F90 ./test2014/
+cp ./c_sigma_oovv_oovv.*   ./test2014/
+tar -zcvf ./test2014.tar.gz ./test2014/
+scp ./test2014.tar.gz saitow@qcl:

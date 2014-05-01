@@ -1,0 +1,66 @@
+--|Title[The full-ic mrci sigma_{aavv}^{cavv} equation in Mulliken notation]
+
+--|Begin.AllContras(12)
+	--|Begin.Contras(2)
+		@W0(a1,a0,a,b) <<= +1.0 @T2(c0,a0,a,b) @Fcore(c0,a1)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a0,i,a1) @W0(a1,a0,a,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(a1,a0,b,a) <<= +1.0 @T2(a0,c0,a,b) @Fcore(c0,a1)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a1,i,a0) @W1(a1,a0,b,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(c0,j,i,a0) <<= +1.0 @V2(c0,a2,a3,a1) @D3(j,a0,i,a2,a3,a1)
+		@S2(i,j,a,b) <<= -1.0 @T2(c0,a0,a,b) @W2(c0,j,i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(c0,j,i,a0) <<= +1.0 @V2(c0,a2,a3,a1) @D3(j,a2,i,a0,a3,a1)
+		@S2(i,j,a,b) <<= -1.0 @T2(a0,c0,a,b) @W3(c0,j,i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(a0,a1,b,a) <<= +1.0 @V2(a1,a,v0,c0) @T2(c0,a0,v0,b)
+		@S2(i,j,a,b) <<= +2.0 @D2(j,a0,i,a1) @W4(a0,a1,b,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(a0,a1,a,b) <<= +1.0 @V2(b,a1,v0,c0) @T2(c0,a0,v0,a)
+		@S2(i,j,a,b) <<= +2.0 @D2(j,a1,i,a0) @W5(a0,a1,a,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(a0,a1,a,b) <<= +1.0 @V2(b,v0,c0,a1) @T2(c0,a0,v0,a)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a1,i,a0) @W6(a0,a1,a,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(a0,a1,b,a) <<= +1.0 @V2(a,v0,c0,a1) @T2(c0,a0,v0,b)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a0,i,a1) @W7(a0,a1,b,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W8(a0,a1,b,a) <<= +1.0 @V2(a1,a,v0,c0) @T2(a0,c0,v0,b)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a0,i,a1) @W8(a0,a1,b,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W9(a0,a1,a,b) <<= +1.0 @V2(b,a1,v0,c0) @T2(c0,a0,a,v0)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a1,i,a0) @W9(a0,a1,a,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W10(a0,a1,a,b) <<= +1.0 @V2(b,v0,c0,a1) @T2(c0,a0,a,v0)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a0,i,a1) @W10(a0,a1,a,b)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W11(a0,a1,b,a) <<= +1.0 @V2(a,v0,c0,a1) @T2(a0,c0,v0,b)
+		@S2(i,j,a,b) <<= -1.0 @D2(j,a1,i,a0) @W11(a0,a1,b,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

@@ -1,0 +1,1257 @@
+#include <sci/icmr/fsrc/f_mr.fh>
+
+
+!  `7MM"""YMM                         mm               
+!    MM    `7                         MM                  
+!    MM   d  .gP"Ya `7MMpMMMb.pMMMb.mmMMmm ,pW"Wq.      
+!    MM""MM ,M'   Yb  MM    MM    MM  MM  6W'   `Wb   
+!    MM   Y 8M""""""  MM    MM    MM  MM  8M     M8 
+!    MM     YM.    ,  MM    MM    MM  MM  YA.   ,A9       
+!  .JMML.    `Mbmmd'.JMML  JMML  JMML.`Mbmo`Ybmd9'        
+
+!                                    Generated date : Sun Apr 20 10:26:25 2014
+
+
+
+!                      >> makeF90_interface2_new <<                     
+! **********************************************************************
+!                                                                       
+! **********************************************************************
+subroutine g_if_sigma_ccvv_ooov_no0_x0_type1_eri_o &
+  (sa3, ia3, sb, ib, T2, W0, nir, nsym, psym, flops)
+
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+use f_mr_if_module
+implicit none
+
+integer, intent(inout) :: sa3, ia3, sb, ib
+real(kind=8), intent(inout) :: T2(*), W0
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops 
+! Some extra stuff
+integer :: sleft
+
+call set_symblock_av2(sb, T2, nir, nsym, psym) ! -> av2_i (allocate)
+sleft = IEOR(sa3,sb)
+
+call g_sigma_ccvv_ooov_no0_x0_type1_eri_o &
+  (sa3, ia3, sb, ib, av2_i, W0, d2, nir, nsym, psym, flops)
+
+deallocate(av2_i)
+
+end subroutine g_if_sigma_ccvv_ooov_no0_x0_type1_eri_o
+
+
+
+!                  >> binary_contract3_new subroutine is called <<            
+! ---------------------------- Parameters used -------------------------------
+!                                                                             
+! Whether the LHS is a BareAmpPack ....... No
+! Name of ERI ............................ V2
+! Name of BareAmpPack appearing in RHS.... T2
+!                                                                             
+!-----------------------------------------------------------------------------
+
+! -- Check1 is skipped 
+!    -- is4RDM.first false
+!    -- allRDM.first false
+!    -- precedence   -1
+! -- Check2 is skipped 
+!    -- is4RDM.second true
+!    -- allRDM.second false
+!    -- precedence    -1
+subroutine g_sigma_ccvv_ooov_no0_x0_type1_eri_o &
+  (s_a3, i_a3, s_b, i_b, T2_, W0_, D2_, nir, nsym, psym, flops)
+
+! FEMTO BEGIN  **************************************************************
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+
+implicit none
+
+integer, intent(in) :: i_b, s_b
+integer, intent(in) :: i_a3, s_a3
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops
+
+! Declare tensors used ...
+type(symblock4), intent(inout) :: D2_(0:nir-1, 0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock3), intent(inout) :: T2_(0:nir-1, 0:nir-1, 0:nir-1)
+real(kind=8)                   :: W0_
+
+! Intermediate arrays                
+real*8, allocatable :: Z1_(:,:,:)
+real*8, allocatable :: Z2_(:,:,:)
+real*8 :: Z3_
+! Indices used in the contractions as dummy ... 
+
+integer :: s_a0, i_a0, s_a1, i_a1, s_a2, i_a2
+! W0(a3,b) += (    1.00000000) T2(a0,a1,a2,b) D2(a3,a1,a2,a0) 
+do s_a0 = 0, nir-1
+do s_a1 = 0, nir-1
+do s_a2 = 0, nir-1
+if( &
+IEOR(s_a3,s_b) == 0 .and. & 
+IEOR(s_a0,s_a1) == IEOR(s_a2,s_b) .and. &
+IEOR(s_a3,s_a1) == IEOR(s_a2,s_a0)) then
+
+if(psym(I_LENGTH,I_O, s_a0)*psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a2) > 0) then
+
+! Z1 <-- T2(a0,a1,a2,b) 
+allocate(Z1_(psym(I_BEGIN,I_O, s_a0):psym(I_END,I_O, s_a0), &
+             psym(I_BEGIN,I_O, s_a1):psym(I_END,I_O, s_a1), &
+             psym(I_BEGIN,I_O, s_a2):psym(I_END,I_O, s_a2)))
+do i_a2 = psym(I_BEGIN, I_O, s_a2), psym(I_END, I_O, s_a2)
+do i_a1 = psym(I_BEGIN, I_O, s_a1), psym(I_END, I_O, s_a1)
+do i_a0 = psym(I_BEGIN, I_O, s_a0), psym(I_END, I_O, s_a0)
+Z1_(i_a0, i_a1, i_a2) =  &
+  T2_(s_a2, s_a1, s_a0)%array(i_a2, i_a1, i_a0)
+end do
+end do
+end do
+! Z2 <-- D2(a3,a1,a2,a0) 
+allocate(Z2_(psym(I_BEGIN,I_O, s_a0):psym(I_END,I_O, s_a0), &
+             psym(I_BEGIN,I_O, s_a1):psym(I_END,I_O, s_a1), &
+             psym(I_BEGIN,I_O, s_a2):psym(I_END,I_O, s_a2)))
+do i_a2 = psym(I_BEGIN, I_O, s_a2), psym(I_END, I_O, s_a2)
+do i_a1 = psym(I_BEGIN, I_O, s_a1), psym(I_END, I_O, s_a1)
+do i_a0 = psym(I_BEGIN, I_O, s_a0), psym(I_END, I_O, s_a0)
+Z2_(i_a0, i_a1, i_a2) =  &
+  D2_(s_a0, s_a2, s_a1, s_a3)%array(i_a0, i_a2, i_a1, i_a3)
+end do
+end do
+end do
+
+! Gemm Z1 * Z2 to form Z3
+call dgemm('n', 'n', 1,&
+                     1,&
+                     psym(I_LENGTH,I_O, s_a0)*psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a2),&
+                     1.00000000d+00, &
+                     Z1_,&
+                     1,&
+                     Z2_,&
+                     psym(I_LENGTH,I_O, s_a0)*psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a2),&
+                     0.0d+00,&
+                     Z3_,&
+                     1)
+
+! W0(a3,b)  <-- Z3
+W0_ = &
+    W0_ &
+  + Z3_
+
+! Flop count
+flops = flops + 1 * &
+                1 * &
+                psym(I_LENGTH,I_O, s_a0)*psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a2) * 2.0d+00
+
+deallocate(Z1_, Z2_)
+end if ! Dim Const
+
+end if ! Irrep Cond
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+! FEMTO END  ****************************************************************
+
+end subroutine g_sigma_ccvv_ooov_no0_x0_type1_eri_o
+
+
+
+!                      >> makeF90_interface2_new <<                     
+! **********************************************************************
+!                                                                       
+! **********************************************************************
+subroutine g_if_sigma_ccvv_ooov_no0_x1_type1_eri_o &
+  (sa3, ia3, sb, ib, V2, W0, S2, nir, nsym, psym, flops)
+
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+use f_mr_if_module
+implicit none
+
+integer, intent(inout) :: sa3, ia3, sb, ib
+real(kind=8), intent(inout) :: V2(*), W0, S2(*)
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops 
+! Some extra stuff
+integer :: sleft
+
+call set_symblock_h2(sa3, V2, nir, nsym, psym) ! -> h2_i (allocate)
+sleft = IEOR(sa3,sb)
+
+call set_symblock_av2_2(sb, S2, nir, nsym, psym) ! -> av2_i2 (allocate)
+call g_sigma_ccvv_ooov_no0_x1_type1_eri_o &
+  (sa3, ia3, sb, ib, h2_i, W0, av2_i2, nir, nsym, psym, flops)
+
+deallocate(av2_i2)
+deallocate(h2_i)
+
+end subroutine g_if_sigma_ccvv_ooov_no0_x1_type1_eri_o
+
+
+
+!                  >> binary_contract3_new subroutine is called <<            
+! ---------------------------- Parameters used -------------------------------
+!                                                                             
+! Whether the LHS is a BareAmpPack ....... Yes
+! Name of ERI ............................ V2
+! Name of BareAmpPack appearing in RHS.... T2
+!                                                                             
+!-----------------------------------------------------------------------------
+
+! -- Check1 is skipped 
+!    -- is4RDM.first false
+!    -- allRDM.first false
+!    -- precedence   -1
+! -- Check2 is skipped 
+!    -- is4RDM.second false
+!    -- allRDM.second false
+!    -- precedence    -1
+subroutine g_sigma_ccvv_ooov_no0_x1_type1_eri_o &
+  (s_a3, i_a3, s_b, i_b, V2_, W0_, S2_, nir, nsym, psym, flops)
+
+! FEMTO BEGIN  **************************************************************
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+
+implicit none
+
+integer, intent(in) :: i_a3, s_a3
+integer, intent(in) :: i_b, s_b
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops
+
+! Declare tensors used ...
+type(symblock3), intent(inout) :: S2_(0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock3), intent(inout) :: V2_(0:nir-1, 0:nir-1, 0:nir-1)
+real(kind=8)                   :: W0_
+
+! Intermediate arrays                
+real*8, allocatable :: Z1_(:,:,:)
+real*8 :: Z2_
+real*8, allocatable :: Z3_(:,:,:)
+! Indices used in the contractions as dummy ... 
+
+integer :: s_w, i_w, s_x, i_x, s_a, i_a
+! S2(w,x,a,b) += (    1.00000000) V2(a3,w,x,a) W0(a3,b) 
+do s_w = 0, nir-1
+do s_x = 0, nir-1
+do s_a = 0, nir-1
+if( &
+IEOR(s_w,s_x) == IEOR(s_a,s_b) .and. & 
+IEOR(s_a3,s_w) == IEOR(s_x,s_a) .and. &
+IEOR(s_a3,s_b) == 0) then
+
+if(psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_V, s_a) > 0) then
+
+! Z1 <-- V2(a3,w,x,a) 
+allocate(Z1_(psym(I_BEGIN,I_C, s_w):psym(I_END,I_C, s_w), &
+             psym(I_BEGIN,I_C, s_x):psym(I_END,I_C, s_x), &
+             psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a)))
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+do i_x = psym(I_BEGIN, I_C, s_x), psym(I_END, I_C, s_x)
+do i_w = psym(I_BEGIN, I_C, s_w), psym(I_END, I_C, s_w)
+Z1_(i_w, i_x, i_a) =  &
+  V2_(s_a, s_x, s_w)%array(i_a, i_x, i_w)
+end do
+end do
+end do
+! Z2 <-- W0(a3,b) 
+Z2_ =  &
+  W0_
+
+! Z3 <-- S2(w,x,a,b) 
+allocate(Z3_(psym(I_BEGIN,I_C, s_w):psym(I_END,I_C, s_w), &
+             psym(I_BEGIN,I_C, s_x):psym(I_END,I_C, s_x), &
+             psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a)))
+
+! Gemm Z1 * Z2 to form Z3
+call dgemm('n', 'n', psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_V, s_a),&
+                     1,&
+                     1,&
+                     1.00000000d+00, &
+                     Z1_,&
+                     psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_V, s_a),&
+                     Z2_,&
+                     1,&
+                     0.0d+00,&
+                     Z3_,&
+                     psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_V, s_a))
+
+! S2(w,x,a,b)  <-- Z3
+do i_w = psym(I_BEGIN, I_C, s_w), psym(I_END, I_C, s_w)
+do i_x = psym(I_BEGIN, I_C, s_x), psym(I_END, I_C, s_x)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+S2_(s_a, s_x, s_w)%array(i_a, i_x, i_w) = &
+    S2_(s_a, s_x, s_w)%array(i_a, i_x, i_w) &
+  + Z3_(i_w, i_x, i_a)
+end do
+end do
+end do
+
+! Flop count
+flops = flops + psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_V, s_a) * &
+                1 * &
+                1 * 2.0d+00
+
+deallocate(Z1_, Z3_)
+end if ! Dim Const
+
+end if ! Irrep Cond
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+! FEMTO END  ****************************************************************
+
+end subroutine g_sigma_ccvv_ooov_no0_x1_type1_eri_o
+
+
+
+!                      >> makeF90_interface2_new <<                     
+! **********************************************************************
+!                                                                       
+! **********************************************************************
+subroutine g_if_sigma_ccvv_ooov_no1_x0_type1_eri_o &
+  (sa3, ia3, sb, ib, T2, W1, nir, nsym, psym, flops)
+
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+use f_mr_if_module
+implicit none
+
+integer, intent(inout) :: sa3, ia3, sb, ib
+real(kind=8), intent(inout) :: T2(*), W1
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops 
+! Some extra stuff
+integer :: sleft
+
+call set_symblock_av2(sb, T2, nir, nsym, psym) ! -> av2_i (allocate)
+sleft = IEOR(sa3,sb)
+
+call g_sigma_ccvv_ooov_no1_x0_type1_eri_o &
+  (sa3, ia3, sb, ib, av2_i, W1, d2, nir, nsym, psym, flops)
+
+deallocate(av2_i)
+
+end subroutine g_if_sigma_ccvv_ooov_no1_x0_type1_eri_o
+
+
+
+!                  >> binary_contract3_new subroutine is called <<            
+! ---------------------------- Parameters used -------------------------------
+!                                                                             
+! Whether the LHS is a BareAmpPack ....... No
+! Name of ERI ............................ V2
+! Name of BareAmpPack appearing in RHS.... T2
+!                                                                             
+!-----------------------------------------------------------------------------
+
+! -- Check1 is skipped 
+!    -- is4RDM.first false
+!    -- allRDM.first false
+!    -- precedence   -1
+! -- Check2 is skipped 
+!    -- is4RDM.second true
+!    -- allRDM.second false
+!    -- precedence    -1
+subroutine g_sigma_ccvv_ooov_no1_x0_type1_eri_o &
+  (s_a3, i_a3, s_b, i_b, T2_, W1_, D2_, nir, nsym, psym, flops)
+
+! FEMTO BEGIN  **************************************************************
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+
+implicit none
+
+integer, intent(in) :: i_b, s_b
+integer, intent(in) :: i_a3, s_a3
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops
+
+! Declare tensors used ...
+type(symblock4), intent(inout) :: D2_(0:nir-1, 0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock3), intent(inout) :: T2_(0:nir-1, 0:nir-1, 0:nir-1)
+real(kind=8)                   :: W1_
+
+! Intermediate arrays                
+real*8, allocatable :: Z1_(:,:,:)
+real*8, allocatable :: Z2_(:,:,:)
+real*8 :: Z3_
+! Indices used in the contractions as dummy ... 
+
+integer :: s_a0, i_a0, s_a1, i_a1, s_a2, i_a2
+! W1(a3,b) += (    1.00000000) T2(a0,a1,a2,b) D2(a3,a1,a2,a0) 
+do s_a0 = 0, nir-1
+do s_a1 = 0, nir-1
+do s_a2 = 0, nir-1
+if( &
+IEOR(s_a3,s_b) == 0 .and. & 
+IEOR(s_a0,s_a1) == IEOR(s_a2,s_b) .and. &
+IEOR(s_a3,s_a1) == IEOR(s_a2,s_a0)) then
+
+if(psym(I_LENGTH,I_O, s_a0)*psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a2) > 0) then
+
+! Z1 <-- T2(a0,a1,a2,b) 
+allocate(Z1_(psym(I_BEGIN,I_O, s_a0):psym(I_END,I_O, s_a0), &
+             psym(I_BEGIN,I_O, s_a1):psym(I_END,I_O, s_a1), &
+             psym(I_BEGIN,I_O, s_a2):psym(I_END,I_O, s_a2)))
+do i_a2 = psym(I_BEGIN, I_O, s_a2), psym(I_END, I_O, s_a2)
+do i_a1 = psym(I_BEGIN, I_O, s_a1), psym(I_END, I_O, s_a1)
+do i_a0 = psym(I_BEGIN, I_O, s_a0), psym(I_END, I_O, s_a0)
+Z1_(i_a0, i_a1, i_a2) =  &
+  T2_(s_a2, s_a1, s_a0)%array(i_a2, i_a1, i_a0)
+end do
+end do
+end do
+! Z2 <-- D2(a3,a1,a2,a0) 
+allocate(Z2_(psym(I_BEGIN,I_O, s_a0):psym(I_END,I_O, s_a0), &
+             psym(I_BEGIN,I_O, s_a1):psym(I_END,I_O, s_a1), &
+             psym(I_BEGIN,I_O, s_a2):psym(I_END,I_O, s_a2)))
+do i_a2 = psym(I_BEGIN, I_O, s_a2), psym(I_END, I_O, s_a2)
+do i_a1 = psym(I_BEGIN, I_O, s_a1), psym(I_END, I_O, s_a1)
+do i_a0 = psym(I_BEGIN, I_O, s_a0), psym(I_END, I_O, s_a0)
+Z2_(i_a0, i_a1, i_a2) =  &
+  D2_(s_a0, s_a2, s_a1, s_a3)%array(i_a0, i_a2, i_a1, i_a3)
+end do
+end do
+end do
+
+! Gemm Z1 * Z2 to form Z3
+call dgemm('n', 'n', 1,&
+                     1,&
+                     psym(I_LENGTH,I_O, s_a0)*psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a2),&
+                     1.00000000d+00, &
+                     Z1_,&
+                     1,&
+                     Z2_,&
+                     psym(I_LENGTH,I_O, s_a0)*psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a2),&
+                     0.0d+00,&
+                     Z3_,&
+                     1)
+
+! W1(a3,b)  <-- Z3
+W1_ = &
+    W1_ &
+  + Z3_
+
+! Flop count
+flops = flops + 1 * &
+                1 * &
+                psym(I_LENGTH,I_O, s_a0)*psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a2) * 2.0d+00
+
+deallocate(Z1_, Z2_)
+end if ! Dim Const
+
+end if ! Irrep Cond
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+! FEMTO END  ****************************************************************
+
+end subroutine g_sigma_ccvv_ooov_no1_x0_type1_eri_o
+
+
+
+!                      >> makeF90_interface2_new <<                     
+! **********************************************************************
+!                                                                       
+! **********************************************************************
+subroutine g_if_sigma_ccvv_ooov_no1_x1_type1_eri_o &
+  (sa3, ia3, sb, ib, V2, W1, S2, nir, nsym, psym, flops)
+
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+use f_mr_if_module
+implicit none
+
+integer, intent(inout) :: sa3, ia3, sb, ib
+real(kind=8), intent(inout) :: V2(*), W1, S2(*)
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops 
+! Some extra stuff
+integer :: sleft
+
+call set_symblock_h2(sa3, V2, nir, nsym, psym) ! -> h2_i (allocate)
+sleft = IEOR(sa3,sb)
+
+call set_symblock_av2_2(sb, S2, nir, nsym, psym) ! -> av2_i2 (allocate)
+call g_sigma_ccvv_ooov_no1_x1_type1_eri_o &
+  (sa3, ia3, sb, ib, h2_i, W1, av2_i2, nir, nsym, psym, flops)
+
+deallocate(av2_i2)
+deallocate(h2_i)
+
+end subroutine g_if_sigma_ccvv_ooov_no1_x1_type1_eri_o
+
+
+
+!                  >> binary_contract3_new subroutine is called <<            
+! ---------------------------- Parameters used -------------------------------
+!                                                                             
+! Whether the LHS is a BareAmpPack ....... Yes
+! Name of ERI ............................ V2
+! Name of BareAmpPack appearing in RHS.... T2
+!                                                                             
+!-----------------------------------------------------------------------------
+
+! -- Check1 is skipped 
+!    -- is4RDM.first false
+!    -- allRDM.first false
+!    -- precedence   -1
+! -- Check2 is skipped 
+!    -- is4RDM.second false
+!    -- allRDM.second false
+!    -- precedence    -1
+subroutine g_sigma_ccvv_ooov_no1_x1_type1_eri_o &
+  (s_a3, i_a3, s_b, i_b, V2_, W1_, S2_, nir, nsym, psym, flops)
+
+! FEMTO BEGIN  **************************************************************
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+
+implicit none
+
+integer, intent(in) :: i_a3, s_a3
+integer, intent(in) :: i_b, s_b
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops
+
+! Declare tensors used ...
+type(symblock3), intent(inout) :: S2_(0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock3), intent(inout) :: V2_(0:nir-1, 0:nir-1, 0:nir-1)
+real(kind=8)                   :: W1_
+
+! Intermediate arrays                
+real*8, allocatable :: Z1_(:,:,:)
+real*8 :: Z2_
+real*8, allocatable :: Z3_(:,:,:)
+! Indices used in the contractions as dummy ... 
+
+integer :: s_x, i_x, s_w, i_w, s_a, i_a
+! S2(w,x,a,b) += (   -2.00000000) V2(a3,x,w,a) W1(a3,b) 
+do s_x = 0, nir-1
+do s_w = 0, nir-1
+do s_a = 0, nir-1
+if( &
+IEOR(s_w,s_x) == IEOR(s_a,s_b) .and. & 
+IEOR(s_a3,s_x) == IEOR(s_w,s_a) .and. &
+IEOR(s_a3,s_b) == 0) then
+
+if(psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_V, s_a) > 0) then
+
+! Z1 <-- V2(a3,x,w,a) 
+allocate(Z1_(psym(I_BEGIN,I_C, s_x):psym(I_END,I_C, s_x), &
+             psym(I_BEGIN,I_C, s_w):psym(I_END,I_C, s_w), &
+             psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a)))
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+do i_w = psym(I_BEGIN, I_C, s_w), psym(I_END, I_C, s_w)
+do i_x = psym(I_BEGIN, I_C, s_x), psym(I_END, I_C, s_x)
+Z1_(i_x, i_w, i_a) =  &
+  V2_(s_a, s_w, s_x)%array(i_a, i_w, i_x)
+end do
+end do
+end do
+! Z2 <-- W1(a3,b) 
+Z2_ =  &
+  W1_
+
+! Z3 <-- S2(w,x,a,b) 
+allocate(Z3_(psym(I_BEGIN,I_C, s_x):psym(I_END,I_C, s_x), &
+             psym(I_BEGIN,I_C, s_w):psym(I_END,I_C, s_w), &
+             psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a)))
+
+! Gemm Z1 * Z2 to form Z3
+call dgemm('n', 'n', psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_V, s_a),&
+                     1,&
+                     1,&
+                     - 2.00000000d+00, &
+                     Z1_,&
+                     psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_V, s_a),&
+                     Z2_,&
+                     1,&
+                     0.0d+00,&
+                     Z3_,&
+                     psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_V, s_a))
+
+! S2(w,x,a,b)  <-- Z3
+do i_w = psym(I_BEGIN, I_C, s_w), psym(I_END, I_C, s_w)
+do i_x = psym(I_BEGIN, I_C, s_x), psym(I_END, I_C, s_x)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+S2_(s_a, s_x, s_w)%array(i_a, i_x, i_w) = &
+    S2_(s_a, s_x, s_w)%array(i_a, i_x, i_w) &
+  + Z3_(i_x, i_w, i_a)
+end do
+end do
+end do
+
+! Flop count
+flops = flops + psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_V, s_a) * &
+                1 * &
+                1 * 2.0d+00
+
+deallocate(Z1_, Z3_)
+end if ! Dim Const
+
+end if ! Irrep Cond
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+! FEMTO END  ****************************************************************
+
+end subroutine g_sigma_ccvv_ooov_no1_x1_type1_eri_o
+
+
+
+!                      >> makeF90_interface2_new <<                     
+! **********************************************************************
+!                                                                       
+! **********************************************************************
+subroutine g_if_sigma_ccvv_ooov_no0_x0_type0_eri_v &
+  (sa2, ia2, T2, W2, nir, nsym, psym, flops)
+
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+use f_mr_if_module
+implicit none
+
+integer, intent(inout) :: sa2, ia2
+real(kind=8), intent(inout) :: T2(*), W2(*)
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops 
+! Some extra stuff
+integer :: sleft
+
+call set_symblock_av2(sa2, T2, nir, nsym, psym) ! -> av2_i (allocate)
+sleft = 0
+call set_symblock_Xav(sleft, W2, nir, nsym, psym) ! -> Xav (allocate) 
+call g_sigma_ccvv_ooov_no0_x0_type0_eri_v &
+  (sa2, ia2, av2_i, Xav, d2, nir, nsym, psym, flops)
+
+deallocate(av2_i)
+deallocate(Xav)
+
+end subroutine g_if_sigma_ccvv_ooov_no0_x0_type0_eri_v
+
+
+
+!                  >> binary_contract3_new subroutine is called <<            
+! ---------------------------- Parameters used -------------------------------
+!                                                                             
+! Whether the LHS is a BareAmpPack ....... No
+! Name of ERI ............................ V2
+! Name of BareAmpPack appearing in RHS.... T2
+!                                                                             
+!-----------------------------------------------------------------------------
+
+! -- Check1 is skipped 
+!    -- is4RDM.first false
+!    -- allRDM.first false
+!    -- precedence   -1
+! -- Check2 is skipped 
+!    -- is4RDM.second true
+!    -- allRDM.second false
+!    -- precedence    -1
+subroutine g_sigma_ccvv_ooov_no0_x0_type0_eri_v &
+  (s_a2, i_a2, T2_, W2_, D2_, nir, nsym, psym, flops)
+
+! FEMTO BEGIN  **************************************************************
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+
+implicit none
+
+integer, intent(in) :: i_a2, s_a2
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops
+
+! Declare tensors used ...
+type(symblock4), intent(inout) :: D2_(0:nir-1, 0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock3), intent(inout) :: T2_(0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock2), intent(inout) :: W2_(0:nir-1, 0:nir-1)
+
+! Intermediate arrays                
+real*8, allocatable :: Z1_(:,:,:)
+real*8, allocatable :: Z2_(:,:,:)
+real*8, allocatable :: Z3_(:,:)
+! Indices used in the contractions as dummy ... 
+
+integer :: s_a1, i_a1, s_a0, i_a0, s_a, i_a, s_a3, i_a3
+! W2(a3,a) += (    1.00000000) T2(a1,a0,a,a2) D2(a3,a1,a2,a0) 
+do s_a1 = 0, nir-1
+do s_a0 = 0, nir-1
+do s_a = 0, nir-1
+do s_a3 = 0, nir-1
+if( &
+IEOR(s_a3,s_a) == 0 .and. & 
+IEOR(s_a1,s_a0) == IEOR(s_a,s_a2) .and. &
+IEOR(s_a3,s_a1) == IEOR(s_a2,s_a0)) then
+
+if(psym(I_LENGTH,I_V, s_a) > 0 .and. &
+   psym(I_LENGTH,I_O, s_a3) > 0 .and. &
+   psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a0) > 0) then
+
+! Z1 <-- T2(a1,a0,a,a2) 
+allocate(Z1_(psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a), &
+             psym(I_BEGIN,I_O, s_a1):psym(I_END,I_O, s_a1), &
+             psym(I_BEGIN,I_O, s_a0):psym(I_END,I_O, s_a0)))
+do i_a0 = psym(I_BEGIN, I_O, s_a0), psym(I_END, I_O, s_a0)
+do i_a1 = psym(I_BEGIN, I_O, s_a1), psym(I_END, I_O, s_a1)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+Z1_(i_a, i_a1, i_a0) =  &
+  T2_(s_a, s_a0, s_a1)%array(i_a, i_a0, i_a1)
+end do
+end do
+end do
+! Z2 <-- D2(a3,a1,a2,a0) 
+allocate(Z2_(psym(I_BEGIN,I_O, s_a1):psym(I_END,I_O, s_a1), &
+             psym(I_BEGIN,I_O, s_a0):psym(I_END,I_O, s_a0), &
+             psym(I_BEGIN,I_O, s_a3):psym(I_END,I_O, s_a3)))
+do i_a3 = psym(I_BEGIN, I_O, s_a3), psym(I_END, I_O, s_a3)
+do i_a0 = psym(I_BEGIN, I_O, s_a0), psym(I_END, I_O, s_a0)
+do i_a1 = psym(I_BEGIN, I_O, s_a1), psym(I_END, I_O, s_a1)
+Z2_(i_a1, i_a0, i_a3) =  &
+  D2_(s_a0, s_a2, s_a1, s_a3)%array(i_a0, i_a2, i_a1, i_a3)
+end do
+end do
+end do
+
+! Z3 <-- W2(a3,a) 
+allocate(Z3_(psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a), &
+             psym(I_BEGIN,I_O, s_a3):psym(I_END,I_O, s_a3)))
+
+! Gemm Z1 * Z2 to form Z3
+call dgemm('n', 'n', psym(I_LENGTH,I_V, s_a),&
+                     psym(I_LENGTH,I_O, s_a3),&
+                     psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a0),&
+                     1.00000000d+00, &
+                     Z1_,&
+                     psym(I_LENGTH,I_V, s_a),&
+                     Z2_,&
+                     psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a0),&
+                     0.0d+00,&
+                     Z3_,&
+                     psym(I_LENGTH,I_V, s_a))
+
+! W2(a3,a)  <-- Z3
+do i_a3 = psym(I_BEGIN, I_O, s_a3), psym(I_END, I_O, s_a3)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+W2_(s_a, s_a3)%array(i_a, i_a3) = &
+    W2_(s_a, s_a3)%array(i_a, i_a3) &
+  + Z3_(i_a, i_a3)
+end do
+end do
+
+! Flop count
+flops = flops + psym(I_LENGTH,I_V, s_a) * &
+                psym(I_LENGTH,I_O, s_a3) * &
+                psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a0) * 2.0d+00
+
+deallocate(Z1_, Z2_, Z3_)
+end if ! Dim Const
+
+end if ! Irrep Cond
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+! FEMTO END  ****************************************************************
+
+end subroutine g_sigma_ccvv_ooov_no0_x0_type0_eri_v
+
+
+
+!                      >> makeF90_interface2_new <<                     
+! **********************************************************************
+!                                                                       
+! **********************************************************************
+subroutine g_if_sigma_ccvv_ooov_no1_x0_type0_eri_v &
+  (sa2, ia2, T2, W3, nir, nsym, psym, flops)
+
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+use f_mr_if_module
+implicit none
+
+integer, intent(inout) :: sa2, ia2
+real(kind=8), intent(inout) :: T2(*), W3(*)
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops 
+! Some extra stuff
+integer :: sleft
+
+call set_symblock_av2(sa2, T2, nir, nsym, psym) ! -> av2_i (allocate)
+sleft = 0
+call set_symblock_Xav(sleft, W3, nir, nsym, psym) ! -> Xav (allocate) 
+call g_sigma_ccvv_ooov_no1_x0_type0_eri_v &
+  (sa2, ia2, av2_i, Xav, d2, nir, nsym, psym, flops)
+
+deallocate(av2_i)
+deallocate(Xav)
+
+end subroutine g_if_sigma_ccvv_ooov_no1_x0_type0_eri_v
+
+
+
+!                  >> binary_contract3_new subroutine is called <<            
+! ---------------------------- Parameters used -------------------------------
+!                                                                             
+! Whether the LHS is a BareAmpPack ....... No
+! Name of ERI ............................ V2
+! Name of BareAmpPack appearing in RHS.... T2
+!                                                                             
+!-----------------------------------------------------------------------------
+
+! -- Check1 is skipped 
+!    -- is4RDM.first false
+!    -- allRDM.first false
+!    -- precedence   -1
+! -- Check2 is skipped 
+!    -- is4RDM.second true
+!    -- allRDM.second false
+!    -- precedence    -1
+subroutine g_sigma_ccvv_ooov_no1_x0_type0_eri_v &
+  (s_a2, i_a2, T2_, W3_, D2_, nir, nsym, psym, flops)
+
+! FEMTO BEGIN  **************************************************************
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+
+implicit none
+
+integer, intent(in) :: i_a2, s_a2
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops
+
+! Declare tensors used ...
+type(symblock4), intent(inout) :: D2_(0:nir-1, 0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock3), intent(inout) :: T2_(0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock2), intent(inout) :: W3_(0:nir-1, 0:nir-1)
+
+! Intermediate arrays                
+real*8, allocatable :: Z1_(:,:,:)
+real*8, allocatable :: Z2_(:,:,:)
+real*8, allocatable :: Z3_(:,:)
+! Indices used in the contractions as dummy ... 
+
+integer :: s_a1, i_a1, s_a0, i_a0, s_a, i_a, s_a3, i_a3
+! W3(a3,a) += (    1.00000000) T2(a1,a0,a,a2) D2(a3,a1,a2,a0) 
+do s_a1 = 0, nir-1
+do s_a0 = 0, nir-1
+do s_a = 0, nir-1
+do s_a3 = 0, nir-1
+if( &
+IEOR(s_a3,s_a) == 0 .and. & 
+IEOR(s_a1,s_a0) == IEOR(s_a,s_a2) .and. &
+IEOR(s_a3,s_a1) == IEOR(s_a2,s_a0)) then
+
+if(psym(I_LENGTH,I_V, s_a) > 0 .and. &
+   psym(I_LENGTH,I_O, s_a3) > 0 .and. &
+   psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a0) > 0) then
+
+! Z1 <-- T2(a1,a0,a,a2) 
+allocate(Z1_(psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a), &
+             psym(I_BEGIN,I_O, s_a1):psym(I_END,I_O, s_a1), &
+             psym(I_BEGIN,I_O, s_a0):psym(I_END,I_O, s_a0)))
+do i_a0 = psym(I_BEGIN, I_O, s_a0), psym(I_END, I_O, s_a0)
+do i_a1 = psym(I_BEGIN, I_O, s_a1), psym(I_END, I_O, s_a1)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+Z1_(i_a, i_a1, i_a0) =  &
+  T2_(s_a, s_a0, s_a1)%array(i_a, i_a0, i_a1)
+end do
+end do
+end do
+! Z2 <-- D2(a3,a1,a2,a0) 
+allocate(Z2_(psym(I_BEGIN,I_O, s_a1):psym(I_END,I_O, s_a1), &
+             psym(I_BEGIN,I_O, s_a0):psym(I_END,I_O, s_a0), &
+             psym(I_BEGIN,I_O, s_a3):psym(I_END,I_O, s_a3)))
+do i_a3 = psym(I_BEGIN, I_O, s_a3), psym(I_END, I_O, s_a3)
+do i_a0 = psym(I_BEGIN, I_O, s_a0), psym(I_END, I_O, s_a0)
+do i_a1 = psym(I_BEGIN, I_O, s_a1), psym(I_END, I_O, s_a1)
+Z2_(i_a1, i_a0, i_a3) =  &
+  D2_(s_a0, s_a2, s_a1, s_a3)%array(i_a0, i_a2, i_a1, i_a3)
+end do
+end do
+end do
+
+! Z3 <-- W3(a3,a) 
+allocate(Z3_(psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a), &
+             psym(I_BEGIN,I_O, s_a3):psym(I_END,I_O, s_a3)))
+
+! Gemm Z1 * Z2 to form Z3
+call dgemm('n', 'n', psym(I_LENGTH,I_V, s_a),&
+                     psym(I_LENGTH,I_O, s_a3),&
+                     psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a0),&
+                     1.00000000d+00, &
+                     Z1_,&
+                     psym(I_LENGTH,I_V, s_a),&
+                     Z2_,&
+                     psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a0),&
+                     0.0d+00,&
+                     Z3_,&
+                     psym(I_LENGTH,I_V, s_a))
+
+! W3(a3,a)  <-- Z3
+do i_a3 = psym(I_BEGIN, I_O, s_a3), psym(I_END, I_O, s_a3)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+W3_(s_a, s_a3)%array(i_a, i_a3) = &
+    W3_(s_a, s_a3)%array(i_a, i_a3) &
+  + Z3_(i_a, i_a3)
+end do
+end do
+
+! Flop count
+flops = flops + psym(I_LENGTH,I_V, s_a) * &
+                psym(I_LENGTH,I_O, s_a3) * &
+                psym(I_LENGTH,I_O, s_a1)*psym(I_LENGTH,I_O, s_a0) * 2.0d+00
+
+deallocate(Z1_, Z2_, Z3_)
+end if ! Dim Const
+
+end if ! Irrep Cond
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+! FEMTO END  ****************************************************************
+
+end subroutine g_sigma_ccvv_ooov_no1_x0_type0_eri_v
+
+
+
+!                      >> makeF90_interface2_new <<                     
+! **********************************************************************
+!                                                                       
+! **********************************************************************
+subroutine g_if_sigma_ccvv_ooov_no0_x0_type1_eri_v &
+  (sb, ib, V2, W2, S2, nir, nsym, psym, flops)
+
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+use f_mr_if_module
+implicit none
+
+integer, intent(inout) :: sb, ib
+real(kind=8), intent(inout) :: V2(*), W2(*), S2(*)
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops 
+! Some extra stuff
+integer :: sleft
+
+call set_symblock_h2(sb, V2, nir, nsym, psym) ! -> h2_i (allocate)
+sleft = 0
+call set_symblock_Xav(sleft, W2, nir, nsym, psym) ! -> Xav (allocate) 
+call set_symblock_av2_2(sb, S2, nir, nsym, psym) ! -> av2_i2 (allocate)
+call g_sigma_ccvv_ooov_no0_x0_type1_eri_v &
+  (sb, ib, h2_i, Xav, av2_i2, nir, nsym, psym, flops)
+
+deallocate(av2_i2)
+deallocate(h2_i)
+deallocate(Xav)
+
+end subroutine g_if_sigma_ccvv_ooov_no0_x0_type1_eri_v
+
+
+
+!                  >> binary_contract3_new subroutine is called <<            
+! ---------------------------- Parameters used -------------------------------
+!                                                                             
+! Whether the LHS is a BareAmpPack ....... Yes
+! Name of ERI ............................ V2
+! Name of BareAmpPack appearing in RHS.... T2
+!                                                                             
+!-----------------------------------------------------------------------------
+
+! -- Check1 is skipped 
+!    -- is4RDM.first false
+!    -- allRDM.first false
+!    -- precedence   -1
+! -- Check2 is skipped 
+!    -- is4RDM.second false
+!    -- allRDM.second false
+!    -- precedence    -1
+subroutine g_sigma_ccvv_ooov_no0_x0_type1_eri_v &
+  (s_b, i_b, V2_, W2_, S2_, nir, nsym, psym, flops)
+
+! FEMTO BEGIN  **************************************************************
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+
+implicit none
+
+integer, intent(in) :: i_b, s_b
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops
+
+! Declare tensors used ...
+type(symblock3), intent(inout) :: S2_(0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock3), intent(inout) :: V2_(0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock2), intent(inout) :: W2_(0:nir-1, 0:nir-1)
+
+! Intermediate arrays                
+real*8, allocatable :: Z1_(:,:)
+real*8, allocatable :: Z2_(:,:,:)
+real*8, allocatable :: Z3_(:,:,:)
+! Indices used in the contractions as dummy ... 
+
+integer :: s_x, i_x, s_w, i_w, s_a3, i_a3, s_a, i_a
+! S2(w,x,a,b) += (   -2.00000000) V2(b,x,w,a3) W2(a3,a) 
+do s_x = 0, nir-1
+do s_w = 0, nir-1
+do s_a3 = 0, nir-1
+do s_a = 0, nir-1
+if( &
+IEOR(s_w,s_x) == IEOR(s_a,s_b) .and. & 
+IEOR(s_b,s_x) == IEOR(s_w,s_a3) .and. &
+IEOR(s_a3,s_a) == 0) then
+
+if(psym(I_LENGTH,I_V, s_a) > 0 .and. &
+   psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_C, s_w) > 0 .and. &
+   psym(I_LENGTH,I_O, s_a3) > 0) then
+
+! Z1 <-- W2(a3,a) 
+allocate(Z1_(psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a), &
+             psym(I_BEGIN,I_O, s_a3):psym(I_END,I_O, s_a3)))
+do i_a3 = psym(I_BEGIN, I_O, s_a3), psym(I_END, I_O, s_a3)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+Z1_(i_a, i_a3) =  &
+  W2_(s_a, s_a3)%array(i_a, i_a3)
+end do
+end do
+! Z2 <-- V2(b,x,w,a3) 
+allocate(Z2_(psym(I_BEGIN,I_O, s_a3):psym(I_END,I_O, s_a3), &
+             psym(I_BEGIN,I_C, s_x):psym(I_END,I_C, s_x), &
+             psym(I_BEGIN,I_C, s_w):psym(I_END,I_C, s_w)))
+do i_w = psym(I_BEGIN, I_C, s_w), psym(I_END, I_C, s_w)
+do i_x = psym(I_BEGIN, I_C, s_x), psym(I_END, I_C, s_x)
+do i_a3 = psym(I_BEGIN, I_O, s_a3), psym(I_END, I_O, s_a3)
+Z2_(i_a3, i_x, i_w) =  &
+  V2_(s_a3, s_w, s_x)%array(i_a3, i_w, i_x)
+end do
+end do
+end do
+
+! Z3 <-- S2(w,x,a,b) 
+allocate(Z3_(psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a), &
+             psym(I_BEGIN,I_C, s_x):psym(I_END,I_C, s_x), &
+             psym(I_BEGIN,I_C, s_w):psym(I_END,I_C, s_w)))
+
+! Gemm Z1 * Z2 to form Z3
+call dgemm('n', 'n', psym(I_LENGTH,I_V, s_a),&
+                     psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_C, s_w),&
+                     psym(I_LENGTH,I_O, s_a3),&
+                     - 2.00000000d+00, &
+                     Z1_,&
+                     psym(I_LENGTH,I_V, s_a),&
+                     Z2_,&
+                     psym(I_LENGTH,I_O, s_a3),&
+                     0.0d+00,&
+                     Z3_,&
+                     psym(I_LENGTH,I_V, s_a))
+
+! S2(w,x,a,b)  <-- Z3
+do i_w = psym(I_BEGIN, I_C, s_w), psym(I_END, I_C, s_w)
+do i_x = psym(I_BEGIN, I_C, s_x), psym(I_END, I_C, s_x)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+S2_(s_a, s_x, s_w)%array(i_a, i_x, i_w) = &
+    S2_(s_a, s_x, s_w)%array(i_a, i_x, i_w) &
+  + Z3_(i_a, i_x, i_w)
+end do
+end do
+end do
+
+! Flop count
+flops = flops + psym(I_LENGTH,I_V, s_a) * &
+                psym(I_LENGTH,I_C, s_x)*psym(I_LENGTH,I_C, s_w) * &
+                psym(I_LENGTH,I_O, s_a3) * 2.0d+00
+
+deallocate(Z1_, Z2_, Z3_)
+end if ! Dim Const
+
+end if ! Irrep Cond
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+! FEMTO END  ****************************************************************
+
+end subroutine g_sigma_ccvv_ooov_no0_x0_type1_eri_v
+
+
+
+!                      >> makeF90_interface2_new <<                     
+! **********************************************************************
+!                                                                       
+! **********************************************************************
+subroutine g_if_sigma_ccvv_ooov_no1_x0_type1_eri_v &
+  (sb, ib, V2, W3, S2, nir, nsym, psym, flops)
+
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+use f_mr_if_module
+implicit none
+
+integer, intent(inout) :: sb, ib
+real(kind=8), intent(inout) :: V2(*), W3(*), S2(*)
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops 
+! Some extra stuff
+integer :: sleft
+
+call set_symblock_h2(sb, V2, nir, nsym, psym) ! -> h2_i (allocate)
+sleft = 0
+call set_symblock_Xav(sleft, W3, nir, nsym, psym) ! -> Xav (allocate) 
+call set_symblock_av2_2(sb, S2, nir, nsym, psym) ! -> av2_i2 (allocate)
+call g_sigma_ccvv_ooov_no1_x0_type1_eri_v &
+  (sb, ib, h2_i, Xav, av2_i2, nir, nsym, psym, flops)
+
+deallocate(av2_i2)
+deallocate(h2_i)
+deallocate(Xav)
+
+end subroutine g_if_sigma_ccvv_ooov_no1_x0_type1_eri_v
+
+
+
+!                  >> binary_contract3_new subroutine is called <<            
+! ---------------------------- Parameters used -------------------------------
+!                                                                             
+! Whether the LHS is a BareAmpPack ....... Yes
+! Name of ERI ............................ V2
+! Name of BareAmpPack appearing in RHS.... T2
+!                                                                             
+!-----------------------------------------------------------------------------
+
+! -- Check1 is skipped 
+!    -- is4RDM.first false
+!    -- allRDM.first false
+!    -- precedence   -1
+! -- Check2 is skipped 
+!    -- is4RDM.second false
+!    -- allRDM.second false
+!    -- precedence    -1
+subroutine g_sigma_ccvv_ooov_no1_x0_type1_eri_v &
+  (s_b, i_b, V2_, W3_, S2_, nir, nsym, psym, flops)
+
+! FEMTO BEGIN  **************************************************************
+use f_mr_module, only : symblock1, symblock2, symblock3, symblock4, symblock5, symblock6
+
+implicit none
+
+integer, intent(in) :: i_b, s_b
+! Information of the Irreps ....
+integer, intent(inout) :: nir, nsym(3,0:nir-1), psym(3,6,0:nir-1)
+! Flop count
+real*8, intent(inout) :: flops
+
+! Declare tensors used ...
+type(symblock3), intent(inout) :: S2_(0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock3), intent(inout) :: V2_(0:nir-1, 0:nir-1, 0:nir-1)
+type(symblock2), intent(inout) :: W3_(0:nir-1, 0:nir-1)
+
+! Intermediate arrays                
+real*8, allocatable :: Z1_(:,:)
+real*8, allocatable :: Z2_(:,:,:)
+real*8, allocatable :: Z3_(:,:,:)
+! Indices used in the contractions as dummy ... 
+
+integer :: s_w, i_w, s_x, i_x, s_a3, i_a3, s_a, i_a
+! S2(w,x,a,b) += (    1.00000000) V2(b,w,x,a3) W3(a3,a) 
+do s_w = 0, nir-1
+do s_x = 0, nir-1
+do s_a3 = 0, nir-1
+do s_a = 0, nir-1
+if( &
+IEOR(s_w,s_x) == IEOR(s_a,s_b) .and. & 
+IEOR(s_b,s_w) == IEOR(s_x,s_a3) .and. &
+IEOR(s_a3,s_a) == 0) then
+
+if(psym(I_LENGTH,I_V, s_a) > 0 .and. &
+   psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_C, s_x) > 0 .and. &
+   psym(I_LENGTH,I_O, s_a3) > 0) then
+
+! Z1 <-- W3(a3,a) 
+allocate(Z1_(psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a), &
+             psym(I_BEGIN,I_O, s_a3):psym(I_END,I_O, s_a3)))
+do i_a3 = psym(I_BEGIN, I_O, s_a3), psym(I_END, I_O, s_a3)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+Z1_(i_a, i_a3) =  &
+  W3_(s_a, s_a3)%array(i_a, i_a3)
+end do
+end do
+! Z2 <-- V2(b,w,x,a3) 
+allocate(Z2_(psym(I_BEGIN,I_O, s_a3):psym(I_END,I_O, s_a3), &
+             psym(I_BEGIN,I_C, s_w):psym(I_END,I_C, s_w), &
+             psym(I_BEGIN,I_C, s_x):psym(I_END,I_C, s_x)))
+do i_x = psym(I_BEGIN, I_C, s_x), psym(I_END, I_C, s_x)
+do i_w = psym(I_BEGIN, I_C, s_w), psym(I_END, I_C, s_w)
+do i_a3 = psym(I_BEGIN, I_O, s_a3), psym(I_END, I_O, s_a3)
+Z2_(i_a3, i_w, i_x) =  &
+  V2_(s_a3, s_x, s_w)%array(i_a3, i_x, i_w)
+end do
+end do
+end do
+
+! Z3 <-- S2(w,x,a,b) 
+allocate(Z3_(psym(I_BEGIN,I_V, s_a):psym(I_END,I_V, s_a), &
+             psym(I_BEGIN,I_C, s_w):psym(I_END,I_C, s_w), &
+             psym(I_BEGIN,I_C, s_x):psym(I_END,I_C, s_x)))
+
+! Gemm Z1 * Z2 to form Z3
+call dgemm('n', 'n', psym(I_LENGTH,I_V, s_a),&
+                     psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_C, s_x),&
+                     psym(I_LENGTH,I_O, s_a3),&
+                     1.00000000d+00, &
+                     Z1_,&
+                     psym(I_LENGTH,I_V, s_a),&
+                     Z2_,&
+                     psym(I_LENGTH,I_O, s_a3),&
+                     0.0d+00,&
+                     Z3_,&
+                     psym(I_LENGTH,I_V, s_a))
+
+! S2(w,x,a,b)  <-- Z3
+do i_w = psym(I_BEGIN, I_C, s_w), psym(I_END, I_C, s_w)
+do i_x = psym(I_BEGIN, I_C, s_x), psym(I_END, I_C, s_x)
+do i_a = psym(I_BEGIN, I_V, s_a), psym(I_END, I_V, s_a)
+S2_(s_a, s_x, s_w)%array(i_a, i_x, i_w) = &
+    S2_(s_a, s_x, s_w)%array(i_a, i_x, i_w) &
+  + Z3_(i_a, i_w, i_x)
+end do
+end do
+end do
+
+! Flop count
+flops = flops + psym(I_LENGTH,I_V, s_a) * &
+                psym(I_LENGTH,I_C, s_w)*psym(I_LENGTH,I_C, s_x) * &
+                psym(I_LENGTH,I_O, s_a3) * 2.0d+00
+
+deallocate(Z1_, Z2_, Z3_)
+end if ! Dim Const
+
+end if ! Irrep Cond
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+end do ! Irrep Loop
+! FEMTO END  ****************************************************************
+
+end subroutine g_sigma_ccvv_ooov_no1_x0_type1_eri_v
+

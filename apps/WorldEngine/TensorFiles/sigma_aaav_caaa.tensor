@@ -1,0 +1,486 @@
+--|Title[The full-ic mrci sigma_{aaav}^{caaa} equation in Mulliken notation]
+
+--|Begin.AllContras(82)
+	--|Begin.Contras(2)
+		@W0(a1,a0,a3,a) <<= +1.0 @V2(a,a3,c0,a2) @T2(c0,a1,a2,a0)
+		@S2(i,j,k,a) <<= +2.0 @D3(k,i,a3,j,a1,a0) @W0(a1,a0,a3,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(a1,a0,a2,a) <<= +1.0 @V2(a,a3,c0,a2) @T2(c0,a1,a3,a0)
+		@S2(i,j,k,a) <<= -1.0 @D3(k,i,a2,j,a1,a0) @W1(a1,a0,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(a0,k,a2,a) <<= +1.0 @V2(a,a2,c0,a1) @T2(c0,a0,a1,k)
+		@S2(i,j,k,a) <<= +2.0 @D2(j,a2,i,a0) @W2(a0,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(a0,k,a1,a) <<= +1.0 @V2(a,a2,c0,a1) @T2(c0,a0,a2,k)
+		@S2(i,j,k,a) <<= -1.0 @D2(j,a1,i,a0) @W3(a0,k,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(a1,a0,a3,a) <<= +1.0 @V2(a,a3,c0,a2) @T2(c0,a1,a0,a2)
+		@S2(i,j,k,a) <<= -1.0 @D3(k,i,a3,j,a1,a0) @W4(a1,a0,a3,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(a1,a0,a2,a) <<= +1.0 @V2(a,a3,c0,a2) @T2(c0,a1,a0,a3)
+		@S2(i,j,k,a) <<= -1.0 @D3(k,i,a2,a0,a1,j) @W5(a1,a0,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(a0,k,a2,a) <<= +1.0 @V2(a,a2,c0,a1) @T2(c0,a0,k,a1)
+		@S2(i,j,k,a) <<= -1.0 @D2(j,a2,i,a0) @W6(a0,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(a0,k,a1,a) <<= +1.0 @V2(a,a2,c0,a1) @T2(c0,a0,k,a2)
+		@S2(i,j,k,a) <<= -1.0 @D2(j,a0,i,a1) @W7(a0,k,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W8(a0,a) <<= +1.0 @V2(a,a2,c0,a1) @T2(c0,a0,a2,a1)
+		@S2(i,j,k,a) <<= -1.0 @D2(k,i,a0,j) @W8(a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W9(a0,a) <<= +1.0 @V2(a,a2,c0,a1) @T2(c0,a0,a1,a2)
+		@S2(i,j,k,a) <<= +2.0 @D2(k,i,a0,j) @W9(a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W10(c0,j,a3,a4) <<= +1.0 @T2(c0,a2,a1,a0) @D3(a0,a2,a1,a3,j,a4)
+		@W11(j,a) <<= +1.0 @V2(a,a4,c0,a3) @W10(c0,j,a3,a4)
+		@S2(i,j,k,a) <<= -1.0 @D1(i,k) @W11(j,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W12(c0,i,a1,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D1(i,a2)
+		@W13(c0,j,k,a3,a4,i) <<= +1.0 @D3(a0,k,a1,a3,j,a4) @W12(c0,i,a1,a0)
+		@S2(i,j,k,a) <<= +0.5 @V2(c0,a3,a4,a) @W13(c0,j,k,a3,a4,i)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W15(c0,j,k,a4) <<= +1.0 @T2(c0,a2,a1,a0) @D3(a0,a2,a1,k,j,a4)
+		@W14(c0,i,a4,a) <<= +1.0 @V2(a,a4,c0,a3) @D1(i,a3)
+		@S2(i,j,k,a) <<= +0.5 @W14(c0,i,a4,a) @W15(c0,j,k,a4)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W17(c0,j,a3,k) <<= +1.0 @T2(c0,a2,a1,a0) @D3(a0,a2,a1,a3,j,k)
+		@W16(c0,i,a3,a) <<= +1.0 @V2(a,a4,c0,a3) @D1(i,a4)
+		@S2(i,j,k,a) <<= +0.5 @W16(c0,i,a3,a) @W17(c0,j,a3,k)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W19(c0,i,a3,k) <<= +1.0 @T2(c0,a2,a1,a0) @D3(a0,a2,a1,a3,i,k)
+		@W18(c0,j,a3,a) <<= +1.0 @V2(a,a4,c0,a3) @D1(j,a4)
+		@S2(i,j,k,a) <<= -1.0 @W18(c0,j,a3,a) @W19(c0,i,a3,k)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W20(c0,j,a1,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D1(j,a2)
+		@W21(c0,i,a4,a3,k,j) <<= +1.0 @D3(a0,a4,a1,a3,i,k) @W20(c0,j,a1,a0)
+		@S2(i,j,k,a) <<= +0.5 @V2(c0,a3,a4,a) @W21(c0,i,a4,a3,k,j)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W23(c0,i,a4,k) <<= +1.0 @T2(c0,a2,a1,a0) @D3(a0,a2,a1,a4,i,k)
+		@W22(c0,j,a4,a) <<= +1.0 @V2(a,a4,c0,a3) @D1(j,a3)
+		@S2(i,j,k,a) <<= +0.5 @W22(c0,j,a4,a) @W23(c0,i,a4,k)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W24(c0,i,a3,a4) <<= +1.0 @T2(c0,a2,a1,a0) @D3(a0,a2,a1,a3,i,a4)
+		@W25(i,a) <<= +1.0 @V2(a,a4,c0,a3) @W24(c0,i,a3,a4)
+		@S2(i,j,k,a) <<= +0.5 @D1(j,k) @W25(i,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W26(c0,a1,a4,a) <<= +1.0 @V2(a,a4,c0,a3) @D1(a1,a3)
+		@W27(a2,a0,a4,a) <<= +1.0 @T2(c0,a2,a1,a0) @W26(c0,a1,a4,a)
+		@S2(i,j,k,a) <<= -1.0 @D3(a0,a2,j,a4,i,k) @W27(a2,a0,a4,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W28(c0,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D1(a1,a2)
+		@W29(a4,a3,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W28(c0,a0)
+		@S2(i,j,k,a) <<= +0.5 @D3(a0,a3,j,a4,i,k) @W29(a4,a3,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W30(c0,a1,a3,a) <<= +1.0 @V2(a,a4,c0,a3) @D1(a1,a4)
+		@W31(a2,a0,a3,a) <<= +1.0 @T2(c0,a2,a1,a0) @W30(c0,a1,a3,a)
+		@S2(i,j,k,a) <<= +0.5 @D3(a0,a2,j,a3,i,k) @W31(a2,a0,a3,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W32(c0,k,a2,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D1(a1,k)
+		@W33(c0,j,i,a4,a3,k) <<= +1.0 @D3(a0,a2,j,a4,i,a3) @W32(c0,k,a2,a0)
+		@S2(i,j,k,a) <<= +0.5 @V2(c0,a3,a4,a) @W33(c0,j,i,a4,a3,k)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W34(c0,a1) <<= +1.0 @T2(c0,a2,a1,a0) @D1(a0,a2)
+		@W35(a4,a3,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W34(c0,a1)
+		@S2(i,j,k,a) <<= -1.0 @D3(a1,a3,j,a4,i,k) @W35(a4,a3,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W36(c0,a0,a4,a) <<= +1.0 @V2(a,a4,c0,a3) @D1(a0,a3)
+		@W37(a2,a1,a4,a) <<= +1.0 @T2(c0,a2,a1,a0) @W36(c0,a0,a4,a)
+		@S2(i,j,k,a) <<= +0.5 @D3(a1,a2,j,a4,i,k) @W37(a2,a1,a4,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W38(c0,a0,a3,a) <<= +1.0 @V2(a,a4,c0,a3) @D1(a0,a4)
+		@W39(a2,a1,a3,a) <<= +1.0 @T2(c0,a2,a1,a0) @W38(c0,a0,a3,a)
+		@S2(i,j,k,a) <<= +0.5 @D3(a1,a3,j,a2,i,k) @W39(a2,a1,a3,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W40(c0,k,a2,a1) <<= +1.0 @T2(c0,a2,a1,a0) @D1(a0,k)
+		@W41(c0,j,i,a3,a4,k) <<= +1.0 @D3(a1,a3,j,a4,i,a2) @W40(c0,k,a2,a1)
+		@S2(i,j,k,a) <<= +0.5 @V2(c0,a3,a4,a) @W41(c0,j,i,a3,a4,k)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W42(c0,a3) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,a1,a3)
+		@W43(a4,a) <<= +1.0 @V2(a,a4,c0,a3) @W42(c0,a3)
+		@S2(i,j,k,a) <<= +1.0 @D2(j,a4,i,k) @W43(a4,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W44(c0,a4) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,a1,a4)
+		@W45(a3,a) <<= +1.0 @V2(a,a4,c0,a3) @W44(c0,a4)
+		@S2(i,j,k,a) <<= -0.5 @D2(j,a3,i,k) @W45(a3,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W46(c0,k) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,a1,k)
+		@W47(a4,a3,k,a) <<= +1.0 @V2(a,a4,c0,a3) @W46(c0,k)
+		@S2(i,j,k,a) <<= -0.5 @D2(j,a4,i,a3) @W47(a4,a3,k,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W48(c0,a4,a3,a2) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a4,a1,a3)
+		@W49(a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W48(c0,a4,a3,a2)
+		@S2(i,j,k,a) <<= -0.5 @D2(j,a2,i,k) @W49(a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W50(c0,k,a3,a2) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,k,a1,a3)
+		@W51(a4,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W50(c0,k,a3,a2)
+		@S2(i,j,k,a) <<= -0.5 @D2(j,a4,i,a2) @W51(a4,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W52(c0,a4,k,a2) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a4,a1,k)
+		@W53(a3,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W52(c0,a4,k,a2)
+		@S2(i,j,k,a) <<= +0.3333333333333333 @D2(j,a2,i,a3) @W53(a3,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W54(c0,a4,k,a2) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a4,a1,k)
+		@W55(a3,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W54(c0,a4,k,a2)
+		@S2(i,j,k,a) <<= +0.16666666666666666 @D2(j,a3,i,a2) @W55(a3,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W56(c0,k,a4,a2) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,k,a1,a4)
+		@W57(a3,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W56(c0,k,a4,a2)
+		@S2(i,j,k,a) <<= +0.16666666666666666 @D2(j,a2,i,a3) @W57(a3,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W58(c0,k,a4,a2) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,k,a1,a4)
+		@W59(a3,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W58(c0,k,a4,a2)
+		@S2(i,j,k,a) <<= +0.3333333333333333 @D2(j,a3,i,a2) @W59(a3,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W60(c0,j,a4,a1) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,j,a4)
+		@W61(a3,j,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W60(c0,j,a4,a1)
+		@S2(i,j,k,a) <<= +1.0 @D2(a1,a3,i,k) @W61(a3,j,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W62(c0,j,a3,a1) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,j,a3)
+		@W63(a4,j,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W62(c0,j,a3,a1)
+		@S2(i,j,k,a) <<= -0.5 @D2(a1,a4,i,k) @W63(a4,j,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W65(c0,j,k,a1) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,j,k)
+		@W64(c0,a1,i,a) <<= +1.0 @V2(a,a4,c0,a3) @D2(a1,a3,i,a4)
+		@S2(i,j,k,a) <<= -0.5 @W64(c0,a1,i,a) @W65(c0,j,k,a1)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W67(c0,i,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a1,a2,i,k)
+		@W66(c0,a0,j,a) <<= +1.0 @V2(a,a4,c0,a3) @D2(a0,a3,j,a4)
+		@S2(i,j,k,a) <<= -0.5 @W66(c0,a0,j,a) @W67(c0,i,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W68(c0,i,a3,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a1,a3,i,a2)
+		@W69(a4,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W68(c0,i,a3,a0)
+		@S2(i,j,k,a) <<= -0.5 @D2(a0,k,j,a4) @W69(a4,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W70(c0,i,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a1,a2,i,a4)
+		@W71(a3,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W70(c0,i,a4,a0)
+		@S2(i,j,k,a) <<= +0.3333333333333333 @D2(a0,a3,j,k) @W71(a3,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W72(c0,i,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a1,a4,i,a2)
+		@W73(a3,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W72(c0,i,a4,a0)
+		@S2(i,j,k,a) <<= +0.16666666666666666 @D2(a0,a3,j,k) @W73(a3,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W74(c0,i,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a1,a2,i,a4)
+		@W75(a3,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W74(c0,i,a4,a0)
+		@S2(i,j,k,a) <<= +0.16666666666666666 @D2(a0,k,j,a3) @W75(a3,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W76(c0,i,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a1,a4,i,a2)
+		@W77(a3,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W76(c0,i,a4,a0)
+		@S2(i,j,k,a) <<= +0.3333333333333333 @D2(a0,k,j,a3) @W77(a3,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W79(c0,i,k,a1) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,i,k)
+		@W78(c0,j,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @D2(j,a4,a1,a3)
+		@S2(i,j,k,a) <<= +1.0 @W78(c0,j,a1,a) @W79(c0,i,k,a1)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W80(c0,i,a4,a1) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,i,a4)
+		@W81(a3,i,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W80(c0,i,a4,a1)
+		@S2(i,j,k,a) <<= -0.5 @D2(j,k,a1,a3) @W81(a3,i,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W82(c0,i,a3,a1) <<= +1.0 @T2(c0,a2,a1,a0) @D2(a0,a2,i,a3)
+		@W83(a4,i,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W82(c0,i,a3,a1)
+		@S2(i,j,k,a) <<= -0.5 @D2(j,a4,a1,k) @W83(a4,i,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W84(c0,j,a3,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(j,a2,a1,a3)
+		@W85(a4,j,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W84(c0,j,a3,a0)
+		@S2(i,j,k,a) <<= -0.5 @D2(a0,a4,i,k) @W85(a4,j,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W86(c0,j,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(j,a4,a1,a2)
+		@W87(a3,j,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W86(c0,j,a4,a0)
+		@S2(i,j,k,a) <<= -0.5 @D2(a0,a3,i,k) @W87(a3,j,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W89(c0,j,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(j,a2,a1,k)
+		@W88(c0,a0,i,a) <<= +1.0 @V2(a,a4,c0,a3) @D2(a0,a4,i,a3)
+		@S2(i,j,k,a) <<= +0.3333333333333333 @W88(c0,a0,i,a) @W89(c0,j,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W91(c0,j,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(j,k,a1,a2)
+		@W90(c0,a0,i,a) <<= +1.0 @V2(a,a4,c0,a3) @D2(a0,a4,i,a3)
+		@S2(i,j,k,a) <<= +0.16666666666666666 @W90(c0,a0,i,a) @W91(c0,j,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W93(c0,j,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(j,a2,a1,k)
+		@W92(c0,a0,i,a) <<= +1.0 @V2(a,a4,c0,a3) @D2(a0,a3,i,a4)
+		@S2(i,j,k,a) <<= +0.16666666666666666 @W92(c0,a0,i,a) @W93(c0,j,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W95(c0,j,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @D2(j,k,a1,a2)
+		@W94(c0,a0,i,a) <<= +1.0 @V2(a,a4,c0,a3) @D2(a0,a3,i,a4)
+		@S2(i,j,k,a) <<= +0.3333333333333333 @W94(c0,a0,i,a) @W95(c0,j,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W96(c0,a3) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,a1,a3)
+		@W97(a4,a) <<= +1.0 @V2(a,a4,c0,a3) @W96(c0,a3)
+		@S2(i,j,k,a) <<= -2.0 @C2(j,a4,i,k) @W97(a4,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W98(c0,a4) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,a1,a4)
+		@W99(a3,a) <<= +1.0 @V2(a,a4,c0,a3) @W98(c0,a4)
+		@S2(i,j,k,a) <<= +1.0 @C2(j,a3,i,k) @W99(a3,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W100(c0,k) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,a1,k)
+		@W101(a4,a3,k,a) <<= +1.0 @V2(a,a4,c0,a3) @W100(c0,k)
+		@S2(i,j,k,a) <<= +1.0 @C2(j,a4,i,a3) @W101(a4,a3,k,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W102(c0,a4,a3,a2) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a4,a1,a3)
+		@W103(a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W102(c0,a4,a3,a2)
+		@S2(i,j,k,a) <<= +1.0 @C2(j,a2,i,k) @W103(a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W104(c0,k,a3,a2) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,k,a1,a3)
+		@W105(a4,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W104(c0,k,a3,a2)
+		@S2(i,j,k,a) <<= +1.0 @C2(j,a4,i,a2) @W105(a4,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W106(c0,a4,k,a2) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a4,a1,k)
+		@W107(a3,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W106(c0,a4,k,a2)
+		@S2(i,j,k,a) <<= -0.6666666666666666 @C2(j,a2,i,a3) @W107(a3,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W108(c0,a4,k,a2) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a4,a1,k)
+		@W109(a3,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W108(c0,a4,k,a2)
+		@S2(i,j,k,a) <<= -0.3333333333333333 @C2(j,a3,i,a2) @W109(a3,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W110(c0,k,a4,a2) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,k,a1,a4)
+		@W111(a3,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W110(c0,k,a4,a2)
+		@S2(i,j,k,a) <<= -0.3333333333333333 @C2(j,a2,i,a3) @W111(a3,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W112(c0,k,a4,a2) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,k,a1,a4)
+		@W113(a3,k,a2,a) <<= +1.0 @V2(a,a4,c0,a3) @W112(c0,k,a4,a2)
+		@S2(i,j,k,a) <<= -0.6666666666666666 @C2(j,a3,i,a2) @W113(a3,k,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W114(c0,j,a4,a1) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,j,a4)
+		@W115(a3,j,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W114(c0,j,a4,a1)
+		@S2(i,j,k,a) <<= -2.0 @C2(a1,a3,i,k) @W115(a3,j,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W116(c0,j,a3,a1) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,j,a3)
+		@W117(a4,j,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W116(c0,j,a3,a1)
+		@S2(i,j,k,a) <<= +1.0 @C2(a1,a4,i,k) @W117(a4,j,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W119(c0,j,k,a1) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,j,k)
+		@W118(c0,a1,i,a) <<= +1.0 @V2(a,a4,c0,a3) @C2(a1,a3,i,a4)
+		@S2(i,j,k,a) <<= +1.0 @W118(c0,a1,i,a) @W119(c0,j,k,a1)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W121(c0,i,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a1,a2,i,k)
+		@W120(c0,a0,j,a) <<= +1.0 @V2(a,a4,c0,a3) @C2(a0,a3,j,a4)
+		@S2(i,j,k,a) <<= +1.0 @W120(c0,a0,j,a) @W121(c0,i,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W122(c0,i,a3,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a1,a3,i,a2)
+		@W123(a4,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W122(c0,i,a3,a0)
+		@S2(i,j,k,a) <<= +1.0 @C2(a0,k,j,a4) @W123(a4,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W124(c0,i,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a1,a2,i,a4)
+		@W125(a3,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W124(c0,i,a4,a0)
+		@S2(i,j,k,a) <<= -0.6666666666666666 @C2(a0,a3,j,k) @W125(a3,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W126(c0,i,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a1,a4,i,a2)
+		@W127(a3,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W126(c0,i,a4,a0)
+		@S2(i,j,k,a) <<= -0.3333333333333333 @C2(a0,a3,j,k) @W127(a3,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W128(c0,i,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a1,a2,i,a4)
+		@W129(a3,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W128(c0,i,a4,a0)
+		@S2(i,j,k,a) <<= -0.3333333333333333 @C2(a0,k,j,a3) @W129(a3,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W130(c0,i,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a1,a4,i,a2)
+		@W131(a3,i,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W130(c0,i,a4,a0)
+		@S2(i,j,k,a) <<= -0.6666666666666666 @C2(a0,k,j,a3) @W131(a3,i,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W133(c0,i,k,a1) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,i,k)
+		@W132(c0,j,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @C2(j,a4,a1,a3)
+		@S2(i,j,k,a) <<= -2.0 @W132(c0,j,a1,a) @W133(c0,i,k,a1)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W134(c0,i,a4,a1) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,i,a4)
+		@W135(a3,i,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W134(c0,i,a4,a1)
+		@S2(i,j,k,a) <<= +1.0 @C2(j,k,a1,a3) @W135(a3,i,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W136(c0,i,a3,a1) <<= +1.0 @T2(c0,a2,a1,a0) @C2(a0,a2,i,a3)
+		@W137(a4,i,a1,a) <<= +1.0 @V2(a,a4,c0,a3) @W136(c0,i,a3,a1)
+		@S2(i,j,k,a) <<= +1.0 @C2(j,a4,a1,k) @W137(a4,i,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W138(c0,j,a3,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(j,a2,a1,a3)
+		@W139(a4,j,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W138(c0,j,a3,a0)
+		@S2(i,j,k,a) <<= +1.0 @C2(a0,a4,i,k) @W139(a4,j,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W140(c0,j,a4,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(j,a4,a1,a2)
+		@W141(a3,j,a0,a) <<= +1.0 @V2(a,a4,c0,a3) @W140(c0,j,a4,a0)
+		@S2(i,j,k,a) <<= +1.0 @C2(a0,a3,i,k) @W141(a3,j,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W143(c0,j,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(j,a2,a1,k)
+		@W142(c0,a0,i,a) <<= +1.0 @V2(a,a4,c0,a3) @C2(a0,a4,i,a3)
+		@S2(i,j,k,a) <<= -0.6666666666666666 @W142(c0,a0,i,a) @W143(c0,j,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W145(c0,j,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(j,k,a1,a2)
+		@W144(c0,a0,i,a) <<= +1.0 @V2(a,a4,c0,a3) @C2(a0,a4,i,a3)
+		@S2(i,j,k,a) <<= -0.3333333333333333 @W144(c0,a0,i,a) @W145(c0,j,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W147(c0,j,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(j,a2,a1,k)
+		@W146(c0,a0,i,a) <<= +1.0 @V2(a,a4,c0,a3) @C2(a0,a3,i,a4)
+		@S2(i,j,k,a) <<= -0.3333333333333333 @W146(c0,a0,i,a) @W147(c0,j,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(3)
+		@W149(c0,j,k,a0) <<= +1.0 @T2(c0,a2,a1,a0) @C2(j,k,a1,a2)
+		@W148(c0,a0,i,a) <<= +1.0 @V2(a,a4,c0,a3) @C2(a0,a3,i,a4)
+		@S2(i,j,k,a) <<= -0.6666666666666666 @W148(c0,a0,i,a) @W149(c0,j,k,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W150(c0,j,i,a3,a2,k) <<= +1.0 @T2(c0,a0,a1,k) @D3(j,a3,i,a0,a1,a2)
+		@S2(i,j,k,a) <<= -1.0 @V2(a,a3,c0,a2) @W150(c0,j,i,a3,a2,k)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W151(c0,j,i,a3,a2,k) <<= +1.0 @T2(a0,c0,a1,k) @D3(j,a3,i,a2,a1,a0)
+		@S2(i,j,k,a) <<= -1.0 @V2(a,a3,c0,a2) @W151(c0,j,i,a3,a2,k)
+	--|End.Contras
+
+
+--|End.AllContras
+

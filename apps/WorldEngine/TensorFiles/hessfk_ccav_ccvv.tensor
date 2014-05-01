@@ -1,0 +1,24 @@
+--|Title[The zeroth-order ct residual_{ccav}^{ccvv} equation in Mulliken notation]
+
+--|Begin.AllContras(4)
+	--|Begin.Contras(1)
+		@S2(w,x,i,a) <<= +16.0 @T2(w,x,v0,a) @cF(v0,i)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,x,i,a) <<= -8.0 @T2(x,w,v0,a) @cF(v0,i)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W0(i,v0) <<= +1.0 @D1(i,a0) @cF(v0,a0)
+		@S2(w,x,i,a) <<= -4.0 @T2(w,x,v0,a) @W0(i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(i,v0) <<= +1.0 @D1(i,a0) @cF(v0,a0)
+		@S2(w,x,i,a) <<= +2.0 @T2(x,w,v0,a) @W1(i,v0)
+	--|End.Contras
+
+
+--|End.AllContras
+

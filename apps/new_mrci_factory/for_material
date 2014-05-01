@@ -1,0 +1,28 @@
+
+
+
+S2(i,k,a,c) += (    1.00000000) D4(i,o3,k,o4,o1,o5,o2,o6) T2(o5,o4,o1,c) V2(o2,o6,o3,a) 
+
+
+
+
+! Scaling       : O(o^8v^1)
+! Max size of X : o^4
+
+! * Begin scaling analysis .... *
+
+for a in {vir}:
+  Read V2 from GA for a
+  for i in {occ}:
+    Declare X as a o^4 tensor
+    for o3 in {occ}:
+      Read D4 from GA for i,o3
+      X_(a,i)(k,o4,o1,o5) += 1.0 sum(o2,o6) V2(,o3,o2,o6) * D4(,,k,o4,o1,o5,o2,o6)
+
+    for c in {vir}:
+      Read S2 from GA for c
+      Read T2 from GA for c
+      S2_(c)(i,k,a) += 1.0 sum(o5,o4,o1) T2(o5,o4,o1,) * X_(a,i)(,k,o4,o1,o5,)
+
+      Accumulate S2_(c)(i,k,a) for c
+

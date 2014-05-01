@@ -1,0 +1,104 @@
+
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <boost/format.hpp>
+#include <femto.hpp>
+#include <SQterm.hpp>
+#include <SQindex.hpp>
+#include <SQtensor.hpp>
+
+using namespace std;
+
+int main(){
+
+  std::vector<femto::Core::SQindex*> EL_indices;
+  std::vector<femto::Core::SQindex*> ER_indices;
+  std::vector<femto::Core::SQindex*> ET_indices;
+
+  femto::Core::SQindex A("a", femto::virt);
+  femto::Core::SQindex B("b", femto::virt);
+  femto::Core::SQindex C("c", femto::virt);
+  femto::Core::SQindex D("d", femto::virt);
+
+  femto::Core::SQindex I("w", femto::core);
+  femto::Core::SQindex J("x", femto::core);
+  femto::Core::SQindex K("y", femto::core);
+  femto::Core::SQindex L("z", femto::core);
+
+  EL_indices.push_back(&I);
+  EL_indices.push_back(&K);  
+  EL_indices.push_back(&A);
+  EL_indices.push_back(&C);  
+
+  ER_indices.push_back(&B);
+  ER_indices.push_back(&D);
+  ER_indices.push_back(&J);
+  ER_indices.push_back(&L);
+
+  femto::Core::sfGen EL(EL_indices);
+  femto::Core::sfGen ER(ER_indices);
+
+  // Unit coefficient
+  vector<string> coeff1;
+
+  vector<femto::Core::SQterm> result; result.reserve(femto::Nterms());
+
+  // < Psi | EL ER | Psi >
+  vector<femto::Core::SQtensor> ten1;
+  ten1.push_back(EL);
+  ten1.push_back(ER);
+  
+  femto::Core::SQterm term1(1.0, coeff1, ten1);
+  vector<femto::Core::SQterm> batch; batch.push_back(term1);
+  femto::Core::normalOrder(&batch); 
+  
+  for(vector<femto::Core::SQterm>::iterator b_it = batch.begin();b_it != batch.end();++b_it){ 
+    b_it->contractkDeltas(); // Burst Kronecker's deltas 
+    b_it->decomposeRDMVirt();    // Decompose RDM, or sfGen 
+  } 
+  vector<femto::Core::SQterm> temp;
+  femto::Core::screenTerms(batch, &temp); // Screen terms with negligible factor
+  
+  for(vector<femto::Core::SQterm>::iterator b_it = temp.begin();b_it != temp.end();++b_it) 
+    b_it->transform2RDM(); // Transform sfGen to RDM (only if isInCanonical is true)
+  
+  result.insert(result.end(), temp.begin(), temp.end()); //*SLOW* 
+
+  vector<femto::Core::SQterm> combined_result;
+  //  femto::combineTerms(result, &combined_result);
+  combined_result = result;
+  
+  cout << endl << "Decompose RDMs ..... " << endl;
+  int cnt = 0;
+  vector<femto::Core::SQterm> result2;
+  for(vector<femto::Core::SQterm>::iterator t = combined_result.begin();t != combined_result.end();++t){
+    vector<femto::Core::SQterm> batch;
+    //cout << boost::format("%5d : ") % cnt++ << *t << endl;
+    femto::Core::decomposeRDMCore(*t, &batch);
+    vector<femto::Core::SQterm>::iterator new_t = batch.begin();
+    for(;new_t != batch.end();++new_t){
+      new_t->contractkDeltas();
+      new_t->transform2RDM();
+    } // End new_t
+    result2.insert(result2.end(), batch.begin(), batch.end());
+  } // End t
+
+  vector<femto::Core::SQterm> combined_result2; //cout << "Size " << result2.size() << endl;
+  femto::Core::combineTerms(result2, &combined_result2);
+  //femto::combineTerms(result2); combined_result2 = result2; //*TEST*
+  result2 = combined_result2;
+  combined_result2.clear();
+  femto::Core::combineTerms(result2, &combined_result2);
+  
+  int count2(0);
+  cout << endl;
+  cout << "< RESULT >" << endl;
+  for(vector<femto::Core::SQterm>::iterator t = combined_result2.begin();t != combined_result2.end();++t){
+    cout << boost::format("%5d : ") % count2 << *t << endl;
+    ++count2;
+  }
+  cout << endl;
+
+}
+

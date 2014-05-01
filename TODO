@@ -1,0 +1,47 @@
+
+* Implementation of the commutator algebra
+  ++ Done
+
+* Serialization of the tensor objects to restart the code generation
+  ++ Molstly done (2012/10/22)
+
+* Enabling the handling of anti-symmentric tensor
+
+* Replace the code generator as an object
+  ++ Done (2012/10/22)
+
+* Introduction of the SQbinary object, in which up to two tensors are contained on the right-hand side and one tensor is set as a left hand side
+  of the contraction. In addition to that, such the tensors are automatically rearranged and the associated indices are rotated for use of BLAS
+  in the actual contraction step. This design may appear as similar to that of SQterm, but should be implemented independently to SQterm.
+  ++ Done
+
+* A brand new code generator that based on the SQbinary class.
+  ++ Done
+
+* Implementation of algebra in terms of triplet type spin-free excitation operator
+
+* Order of SQtensor instances in Tensors_ of SQterm may have some ambiguity depending on situation
+  ++ Solved. But it should be much more sophisticated.
+
+* Upcoming generator class, SQbinary2, which takes the SQinput object as input. Inside the class, SQcontract is heavily utilized and the diagonal 
+  preconditionor can be transformed into the more efficient code by employing the specific simplicity of the contraction pattern. For example, the preconditionor 
+  frequently has terms of this form, 
+    Hdiag(i,j,a,a) += D2(i,i,o1,o2) V(j,j,o1,o2),
+  in which the RHS is completely independent of the virtual index a. So in the upcoming reaktor, X(i,j) += D2(i,i,o1,o2) V(j,j,o1,o2) is formed first, 
+  then assigned to each elements of Hdiag. By doing like this, order of construction of the preconditionor may hopefully be reduced further.
+
+* Use of BGL. A stream of binary contraction can be represented very consicely by using so-called graph container available in Boost. Based on this strategy,
+  the tree structure in terms of the intermediate tensors will be implemented in the context of the upcoming SQreaktor class.
+ 
+* The auxiliary index is used only at the code generation step (not needed before the normal ordering). So, it may be somewhat confusing to add the 'aux' member into the char_state in femto.hpp.
+  There can be some nice design to handle such the additional orbital group used after all the like terms are combined (2012/11/27).  
+
+* There can be the other route to combine like terms much more efficiently. Firsyly, define the > member of SQtensor which returns completely unique order for the naming of each indices (as is done in SQA).
+  Then, for each naming SQtensors are sorted and compared.
+
+* Algebra in terms of spin-dependent creation and destruction operator for evaluation of spin-dependent quantity
+
+* Make order of tensors in Tensors_ unique once all the names of dummy indices are given. Also, determine terms are whether like terms, or not by names of the non-dummy indices first.
+
+* Implement operator decomposition algorithms
+ 

@@ -1,0 +1,18 @@
+--|Title[The zeroth-order ct residual_{caaa}^{ref} equation in Mulliken notation]
+
+--|Begin.AllContras(3)
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= +4.0 @D1(k,j) @cF(w,i)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= -2.0 @D1(k,i) @cF(w,j)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(w,k,i,j) <<= -2.0 @D2(k,j,a0,i) @cF(w,a0)
+	--|End.Contras
+
+
+--|End.AllContras
+

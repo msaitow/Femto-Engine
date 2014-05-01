@@ -1,0 +1,76 @@
+--|Title[The full-ic mrci sigma_{caav}^{ccvv} equation in Mulliken notation]
+
+--|Begin.AllContras(14)
+	--|Begin.Contras(2)
+		@W0(w,a) <<= +1.0 @T2(c0,w,v0,a) @Fcore(v0,c0)
+		@S2(w,i,j,a) <<= -4.0 @D1(j,i) @W0(w,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(w,a) <<= +1.0 @T2(w,c0,v0,a) @Fcore(v0,c0)
+		@S2(w,i,j,a) <<= +2.0 @D1(j,i) @W1(w,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(w,a) <<= +1.0 @V2(w,c1,v0,c0) @T2(c0,c1,v0,a)
+		@S2(w,i,j,a) <<= +4.0 @D1(j,i) @W2(w,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(w,a) <<= +1.0 @V2(w,c1,v0,c0) @T2(c1,c0,v0,a)
+		@S2(w,i,j,a) <<= -2.0 @D1(j,i) @W3(w,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(c0,j,i,v0) <<= +1.0 @V2(v0,a1,c0,a0) @D2(j,i,a0,a1)
+		@S2(w,i,j,a) <<= +2.0 @T2(w,c0,a,v0) @W4(c0,j,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(c0,j,i,v0) <<= +1.0 @V2(v0,a1,c0,a0) @D2(j,a1,a0,i)
+		@S2(w,i,j,a) <<= +2.0 @T2(w,c0,v0,a) @W5(c0,j,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(c0,j,i,v0) <<= +1.0 @V2(v0,c0,a1,a0) @D2(j,i,a1,a0)
+		@S2(w,i,j,a) <<= -4.0 @T2(w,c0,a,v0) @W6(c0,j,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(c0,j,i,v0) <<= +1.0 @V2(v0,c0,a1,a0) @D2(j,i,a1,a0)
+		@S2(w,i,j,a) <<= +2.0 @T2(w,c0,v0,a) @W7(c0,j,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W8(c0,i,j,v0) <<= +1.0 @V2(v0,c0,j,a0) @D1(i,a0)
+		@S2(w,i,j,a) <<= -4.0 @T2(w,c0,a,v0) @W8(c0,i,j,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W9(c0,i,j,v0) <<= +1.0 @V2(v0,c0,j,a0) @D1(i,a0)
+		@S2(w,i,j,a) <<= +2.0 @T2(w,c0,v0,a) @W9(c0,i,j,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W10(c0,i,j,v0) <<= +1.0 @V2(v0,j,c0,a0) @D1(i,a0)
+		@S2(w,i,j,a) <<= -4.0 @T2(w,c0,v0,a) @W10(c0,i,j,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W11(c0,i,j,v0) <<= +1.0 @V2(v0,j,c0,a0) @D1(i,a0)
+		@S2(w,i,j,a) <<= +2.0 @T2(w,c0,a,v0) @W11(c0,i,j,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W12(w,a) <<= +1.0 @V2(a,v0,v1,c0) @T2(w,c0,v0,v1)
+		@S2(w,i,j,a) <<= -4.0 @D1(j,i) @W12(w,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W13(w,a) <<= +1.0 @V2(a,v0,v1,c0) @T2(w,c0,v1,v0)
+		@S2(w,i,j,a) <<= +2.0 @D1(j,i) @W13(w,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

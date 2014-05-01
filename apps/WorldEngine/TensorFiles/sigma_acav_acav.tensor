@@ -1,0 +1,208 @@
+--|Title[The full-ic mrci sigma_{acav}^{acav} equation in Mulliken notation]
+
+--|Begin.AllContras(41)
+	--|Begin.Contras(1)
+		@S2(i,w,j,a) <<= +2.0 Ecore @T2(a1,w,a0,a) @D2(j,i,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(i,w,j,a) <<= +2.0 Ecore @T2(a0,w,j,a) @D1(i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W0(c0,j,i,a) <<= +1.0 @T2(a1,c0,a0,a) @D2(j,i,a1,a0)
+		@S2(i,w,j,a) <<= -2.0 @Fcore(w,c0) @W0(c0,j,i,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(j,a1,i,a0) <<= +1.0 @D3(j,i,a3,a2,a1,a0) @Fcore(a3,a2)
+		@S2(i,w,j,a) <<= +2.0 @T2(a1,w,a0,a) @W1(j,a1,i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(i,a1,a0,j) <<= +1.0 @D2(i,a2,a1,a0) @Fcore(j,a2)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,a1,a) @W2(i,a1,a0,j)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(c0,i,j,a) <<= +1.0 @T2(a0,c0,j,a) @D1(i,a0)
+		@S2(i,w,j,a) <<= -2.0 @Fcore(w,c0) @W3(c0,i,j,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(i,a0) <<= +1.0 @D2(i,a0,a2,a1) @Fcore(a2,a1)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,j,a) @W4(i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(j,a0,i,a1) <<= +1.0 @D2(j,i,a0,a2) @Fcore(a2,a1)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,a1,a) @W5(j,a0,i,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(w,i,a1,a) <<= +1.0 @T2(a0,w,a1,a) @D1(i,a0)
+		@S2(i,w,j,a) <<= +2.0 @Fcore(j,a1) @W6(w,i,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(w,j,i,v0) <<= +1.0 @T2(w,a1,v0,a0) @D2(j,i,a1,a0)
+		@S2(i,w,j,a) <<= +2.0 @Fcore(v0,a) @W7(w,j,i,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W8(w,i,j,v0) <<= +1.0 @T2(w,a0,v0,j) @D1(i,a0)
+		@S2(i,w,j,a) <<= +2.0 @Fcore(v0,a) @W8(w,i,j,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W9(w,c0,j,a1,i,a0) <<= +1.0 @V2(w,a3,c0,a2) @D3(j,i,a2,a3,a1,a0)
+		@S2(i,w,j,a) <<= +1.0 @T2(a1,c0,a0,a) @W9(w,c0,j,a1,i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W10(w,c0,j,a1,i,a0) <<= +1.0 @V2(w,c0,a3,a2) @D3(j,i,a3,a2,a1,a0)
+		@S2(i,w,j,a) <<= -2.0 @T2(a1,c0,a0,a) @W10(w,c0,j,a1,i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(1)
+		@S2(i,w,j,a) <<= +1.0 @T2(a1,w,a0,a) @C4(a0,a1,i,j)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W11(c0,i,a2,a) <<= +1.0 @T2(a0,c0,a1,a) @D2(i,a2,a1,a0)
+		@S2(i,w,j,a) <<= +1.0 @V2(c0,a2,w,j) @W11(c0,i,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W12(c0,i,a2,a) <<= +1.0 @T2(a0,c0,a1,a) @D2(i,a2,a1,a0)
+		@S2(i,w,j,a) <<= -2.0 @V2(c0,w,j,a2) @W12(c0,i,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W13(i,a1,a0,j) <<= +1.0 @V2(j,a3,a4,a2) @D3(i,a3,a4,a2,a1,a0)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,a1,a) @W13(i,a1,a0,j)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W14(w,c0,i,a0) <<= +1.0 @V2(w,a2,c0,a1) @D2(i,a0,a2,a1)
+		@S2(i,w,j,a) <<= +1.0 @T2(a0,c0,j,a) @W14(w,c0,i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W15(w,c0,i,a0) <<= +1.0 @V2(w,c0,a2,a1) @D2(i,a0,a2,a1)
+		@S2(i,w,j,a) <<= -2.0 @T2(a0,c0,j,a) @W15(w,c0,i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W16(i,a0) <<= +1.0 @V2(a4,a2,a3,a1) @D3(i,a0,a4,a2,a3,a1)
+		@S2(i,w,j,a) <<= +1.0 @T2(a0,w,j,a) @W16(i,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W17(w,a0,a2,a) <<= +1.0 @V2(w,a2,c0,a1) @T2(a0,c0,a1,a)
+		@S2(i,w,j,a) <<= +1.0 @D2(j,i,a0,a2) @W17(w,a0,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W18(w,a0,a2,a) <<= +1.0 @V2(w,c0,a2,a1) @T2(a0,c0,a1,a)
+		@S2(i,w,j,a) <<= -2.0 @D2(j,i,a0,a2) @W18(w,a0,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W19(j,a0,i,a1) <<= +1.0 @V2(a1,a3,a4,a2) @D3(j,i,a4,a2,a0,a3)
+		@S2(i,w,j,a) <<= +2.0 @T2(w,a0,a,a1) @W19(j,a0,i,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W20(w,a0,j,a) <<= +1.0 @V2(w,j,c0,a1) @T2(a0,c0,a1,a)
+		@S2(i,w,j,a) <<= +1.0 @D1(i,a0) @W20(w,a0,j,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W21(i,a0,j,a1) <<= +1.0 @V2(j,a2,a3,a1) @D2(i,a2,a3,a0)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,a1,a) @W21(i,a0,j,a1)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W22(w,a0,j,a) <<= +1.0 @V2(w,c0,j,a1) @T2(a0,c0,a1,a)
+		@S2(i,w,j,a) <<= -2.0 @D1(i,a0) @W22(w,a0,j,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W23(i,a0,j,a2) <<= +1.0 @V2(j,a2,a3,a1) @D2(i,a0,a3,a1)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,a2,a) @W23(i,a0,j,a2)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W24(w,a1,a0,a) <<= +1.0 @V2(a,w,v0,c0) @T2(c0,a1,v0,a0)
+		@S2(i,w,j,a) <<= +4.0 @D2(j,i,a1,a0) @W24(w,a1,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W25(w,a1,a0,a3,a2,a) <<= +1.0 @V2(a,a3,v0,a2) @T2(w,a1,v0,a0)
+		@S2(i,w,j,a) <<= -1.0 @D3(j,i,a3,a2,a1,a0) @W25(w,a1,a0,a3,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W26(w,a1,a0,a) <<= +1.0 @V2(a,v0,w,c0) @T2(c0,a1,v0,a0)
+		@S2(i,w,j,a) <<= -2.0 @D2(j,i,a1,a0) @W26(w,a1,a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W27(w,a1,a0,a3,a2,a) <<= +1.0 @V2(a,v0,a3,a2) @T2(w,a1,v0,a0)
+		@S2(i,w,j,a) <<= +2.0 @D3(j,i,a3,a2,a1,a0) @W27(w,a1,a0,a3,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W28(w,i,a2,v0) <<= +1.0 @T2(a0,w,a1,v0) @D2(i,a2,a1,a0)
+		@S2(i,w,j,a) <<= +2.0 @V2(v0,a,j,a2) @W28(w,i,a2,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W29(w,a0,j,a) <<= +1.0 @V2(a,w,v0,c0) @T2(c0,a0,v0,j)
+		@S2(i,w,j,a) <<= +4.0 @D1(i,a0) @W29(w,a0,j,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W30(i,a0,v0,a) <<= +1.0 @V2(v0,a1,a2,a) @D2(i,a0,a1,a2)
+		@S2(i,w,j,a) <<= -1.0 @T2(a0,w,j,v0) @W30(i,a0,v0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W31(w,a0,j,a) <<= +1.0 @V2(a,v0,w,c0) @T2(c0,a0,v0,j)
+		@S2(i,w,j,a) <<= -2.0 @D1(i,a0) @W31(w,a0,j,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W32(i,a0,v0,a) <<= +1.0 @V2(v0,a,a2,a1) @D2(i,a0,a2,a1)
+		@S2(i,w,j,a) <<= +2.0 @T2(a0,w,j,v0) @W32(i,a0,v0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W33(w,i,a2,v0) <<= +1.0 @T2(a0,w,a1,v0) @D2(i,a2,a1,a0)
+		@S2(i,w,j,a) <<= -1.0 @V2(v0,j,a2,a) @W33(w,i,a2,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W34(w,a0,a1,a) <<= +1.0 @V2(a,a2,v0,a1) @T2(w,a0,v0,a2)
+		@S2(i,w,j,a) <<= -1.0 @D2(j,i,a0,a1) @W34(w,a0,a1,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W35(w,a0,a2,a) <<= +1.0 @V2(a,v0,a2,a1) @T2(w,a0,v0,a1)
+		@S2(i,w,j,a) <<= +2.0 @D2(j,i,a0,a2) @W35(w,a0,a2,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W36(w,a0,j,a) <<= +1.0 @V2(a,v0,j,a1) @T2(w,a0,v0,a1)
+		@S2(i,w,j,a) <<= +2.0 @D1(i,a0) @W36(w,a0,j,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W37(w,a0,j,a) <<= +1.0 @V2(a,a1,v0,j) @T2(w,a0,v0,a1)
+		@S2(i,w,j,a) <<= -1.0 @D1(i,a0) @W37(w,a0,j,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

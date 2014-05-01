@@ -1,0 +1,36 @@
+--|Title[The ct residual_{aaav}^{ccvv} equation in Mulliken notation]
+
+--|Begin.AllContras(6)
+	--|Begin.Contras(2)
+		@W0(i,a) <<= +1.0 @V2(i,c0,v0,c1) @T2(c0,c1,v0,a)
+		@S2(i,j,k,a) <<= -2.0 @D1(k,j) @W0(i,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(i,a) <<= +1.0 @V2(i,c0,v0,c1) @T2(c1,c0,v0,a)
+		@S2(i,j,k,a) <<= +4.0 @D1(k,j) @W1(i,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(j,a) <<= +1.0 @V2(j,c0,v0,c1) @T2(c1,c0,v0,a)
+		@S2(i,j,k,a) <<= -8.0 @D1(k,i) @W2(j,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(j,a) <<= +1.0 @V2(j,c0,v0,c1) @T2(c0,c1,v0,a)
+		@S2(i,j,k,a) <<= +4.0 @D1(k,i) @W3(j,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(a0,a) <<= +1.0 @V2(a0,c1,v0,c0) @T2(c1,c0,v0,a)
+		@S2(i,j,k,a) <<= +2.0 @D2(k,i,a0,j) @W4(a0,a)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(a0,a) <<= +1.0 @V2(a0,c1,v0,c0) @T2(c0,c1,v0,a)
+		@S2(i,j,k,a) <<= -4.0 @D2(k,i,a0,j) @W5(a0,a)
+	--|End.Contras
+
+
+--|End.AllContras
+

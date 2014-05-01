@@ -1,0 +1,46 @@
+--|Title[The zeroth-order ct residual_{caaa}^{aaav} equation in Mulliken notation]
+
+--|Begin.AllContras(8)
+	--|Begin.Contras(2)
+		@W0(w,a2,a1,a0) <<= +1.0 @T2(a2,a1,v0,a0) @cF(w,v0)
+		@S2(w,k,i,j) <<= -2.0 @D3(k,j,a2,i,a1,a0) @W0(w,a2,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W1(w,a1,a0,k) <<= +1.0 @T2(a1,a0,k,v0) @cF(w,v0)
+		@S2(w,k,i,j) <<= -1.0 @D2(j,a1,i,a0) @W1(w,a1,a0,k)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W2(w,i,a1,a0) <<= +1.0 @T2(i,a1,a0,v0) @cF(w,v0)
+		@S2(w,k,i,j) <<= -1.0 @D2(k,j,a1,a0) @W2(w,i,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W3(w,j,a1,a0) <<= +1.0 @T2(j,a1,a0,v0) @cF(w,v0)
+		@S2(w,k,i,j) <<= -1.0 @D2(k,a0,a1,i) @W3(w,j,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W4(w,i,a1,a0) <<= +1.0 @T2(i,a1,v0,a0) @cF(w,v0)
+		@S2(w,k,i,j) <<= +2.0 @D2(k,j,a1,a0) @W4(w,i,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W5(w,j,a1,a0) <<= +1.0 @T2(j,a1,v0,a0) @cF(w,v0)
+		@S2(w,k,i,j) <<= -1.0 @D2(k,i,a1,a0) @W5(w,j,a1,a0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W6(k,j,i,v0) <<= +1.0 @T2(j,i,v0,a0) @D1(k,a0)
+		@S2(w,k,i,j) <<= -1.0 @W6(k,j,i,v0) @cF(w,v0)
+	--|End.Contras
+
+	--|Begin.Contras(2)
+		@W7(k,j,i,v0) <<= +1.0 @T2(j,i,a0,v0) @D1(k,a0)
+		@S2(w,k,i,j) <<= +2.0 @W7(k,j,i,v0) @cF(w,v0)
+	--|End.Contras
+
+
+--|End.AllContras
+

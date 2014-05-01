@@ -1,0 +1,165 @@
+
+#include <map>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <boost/format.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/tokenizer.hpp>
+#include <femto.hpp>
+#include <SQterm.hpp>
+#include <SQindex.hpp>
+#include <SQtensor.hpp>
+#include <SQreaktor.hpp>
+#include <SQportal.hpp>
+
+using namespace std;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class sigmaReader{
+
+public:
+
+  sigmaReader(const femto::SQcont<pair<string,string> > tensor2elem, const string mySynonym, const string myFormat);
+  pair<string,string> readElements(const string fileName);
+  bool isTensorFile(const std::string fileName) const;
+  
+private:
+  
+  string theFormat_;  // Format for the Fafnir tensor file
+  string theSynonym_; // Synonym for the sigma contarctions
+  std::map<string, string> tensor2elem_;
+}; // End class
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+sigmaReader::sigmaReader(const femto::SQcont<pair<string,string> > tensorLabels, const string theSynonym, const string theFormat)
+  : theFormat_ (theFormat),
+    theSynonym_(theSynonym)
+{ for(auto t = tensorLabels.cbegin(); t != tensorLabels.cend();++t) tensor2elem_[t->first] = t->second; }
+
+//////////////////////////////////////////////////////////////////////////////////////
+pair<string,string> 
+sigmaReader::readElements(const std::string fileName)
+{
+  
+  if(theSynonym_.size() + fileName.size() < theFormat_.size()) { cout << "readElements: Algorithmic error <r203r92>" << endl; abort(); }
+  else{
+    string mySynonym("");
+    for(int i = 0;i < theSynonym_.size();++i) mySynonym += fileName[i];
+    if(mySynonym != theSynonym_) { cout << "readElements: Algorithmic error <ry23y30reu> >> " << mySynonym << " << " << endl; abort(); }
+    else {
+      size_t formatStart(fileName.size()-theFormat_.size());
+      string myFormat(fileName.substr(formatStart));
+      if(myFormat != theFormat_) { cout << "readElements: Algorithmic error <3hr92h4r9uwe>" << endl; abort(); }
+      else {
+	
+	typedef boost::char_separator<char> char_separator;
+	typedef boost::tokenizer<char_separator> tokenizer;
+	char_separator sep("_", "", boost::keep_empty_tokens);
+	tokenizer tokens(fileName, sep);
+	int pos(0);
+	string lBasis(""); // Left space
+	string rBasis(""); // Right space
+	for(auto tok_iter = tokens.begin();tok_iter != tokens.end();++tok_iter,++pos){
+	  if(pos == 1) lBasis = *tok_iter;
+	  if(pos == 2) rBasis = *tok_iter;
+	} // End tok_iter
+	if(lBasis == "" || rBasis == "") { cout << "readElements: Algorithmic error <rh283xgr28yr>" << endl; abort(); }
+	string rBasisTrimmed("");
+	size_t myPos(rBasis.size()-theFormat_.size());
+	for(int i = 0;i < myPos;++i) rBasisTrimmed += rBasis[i];
+	
+	return pair<string, string>(tensor2elem_[lBasis], tensor2elem_[rBasisTrimmed]);
+	
+      } // End else
+    } // End else
+  } // End else
+  
+} // End func
+
+//////////////////////////////////////////////////////////////////////////////////////
+bool sigmaReader::isTensorFile(const std::string fileName) const
+{
+  
+  if(fileName.size() < theFormat_.size()) return false;
+  else{
+    size_t formatStart(fileName.size()-theFormat_.size());
+    string myFormat(fileName.substr(formatStart));
+    if(myFormat == theFormat_) return true;
+    else                       return false;
+  } // End else
+  
+} // End func
+
+///////////////////////////////////////////////////////////////////////////////////////
+int main(){
+  
+  ///// Directory for the tensor files
+  boost::filesystem::path tensorDir("./TensorFiles");
+  femto::SQcont<std::pair<std::string, std::string> > LabelAndTensor; // <Label, Tensor file name>
+  
+  LabelAndTensor <= make_pair("ref",  "g"   );
+  LabelAndTensor <= make_pair("aavv", "oovv");
+  LabelAndTensor <= make_pair("aaav", "ooov");
+  LabelAndTensor <= make_pair("ccvv", "ccvv");
+  LabelAndTensor <= make_pair("cavv", "covv");
+  LabelAndTensor <= make_pair("ccaa", "ccoo");
+  LabelAndTensor <= make_pair("ccav", "ccov");
+  LabelAndTensor <= make_pair("caaa", "cooo");
+  LabelAndTensor <= make_pair("caav", "coov");
+  LabelAndTensor <= make_pair("acav", "ocov");
+
+  sigmaReader myReader(LabelAndTensor, "sigma", ".tensor");
+
+  //////////// Tensor files //////////////////////////////////////////////////////
+  femto::SQcont<pair<string,pair<string,string> > > sigmaAndElems; // <Name of left-hand side tensor, <Name of tensor file, Name of the element> >
+  { // Extract the tensor file name and the corresponding matrix block name
+    boost::filesystem::directory_iterator end;
+    for(boost::filesystem::directory_iterator f(tensorDir); f != end;++f){
+      auto myPath(f->path().string());
+      auto myName(myPath.substr(tensorDir.string().size()+1));
+      if(myReader.isTensorFile(myName) && !boost::filesystem::is_directory(*f)){
+        pair<string, string> myLabel(myReader.readElements(myName));
+	ostringstream myBlock;
+	myBlock << "sigma_" << myLabel.first << "_" << myLabel.second;
+	string sigmaName("");
+	if(myLabel.first == "g") sigmaName = "@S0";
+	else                     sigmaName = "@S2";
+	sigmaAndElems <= make_pair(sigmaName, pair<string, string>(myName,myBlock.str()));
+	cout << "Tensor file detected => " << myName << " ..." << endl;
+      } // End if
+    } // End f
+  } // End scope
+  ////////////////////////////////////////////////////////////////////////////////
+
+  for(auto n = sigmaAndElems.begin();n != sigmaAndElems.end();++n){
+    string sigName(n->first);
+    string tenName(n->second.first);
+    string elemName(n->second.second);
+    bool   isBareLHS(sigName != "@S0");
+    cout << elemName << " ---> " << sigName << endl;
+    vector<vector<femto::Core::SQbinary> > myBins;
+
+    ostringstream tensorFile;
+    tensorFile << tensorDir.string() << "/" << tenName;
+ 
+    femto::Portal::SQportal myPortal(tensorFile.str(), sigName, femto::Mulliken);
+    
+    myPortal.transportContractions(myBins, femto::Portal::NEW2);
+
+    cout << endl << endl;
+    cout << "----------------------------------------------------------" << endl;
+    cout << "----------------------------------------------------------" << endl;
+    for(auto ts = myBins.begin();ts != myBins.end();++ts){
+      cout << boost::format(">> No. %d\n") % ((int)(ts-myBins.begin())+1);
+      femto::SQcont<femto::Core::SQbinary> temp(*ts);
+      cout << temp << endl << endl; 
+    } // End ts
+    
+    femto::Reaktor::SQreaktor gen(myBins, elemName, isBareLHS, "V2", "T2"); // for aavv/aavv
+    gen.init_header("mrci_header");
+    gen.generate(femto::Reaktor::Orz, femto::Reaktor::Fafnir);
+  } // End n
+  
+}
